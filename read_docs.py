@@ -15,39 +15,24 @@ import os
 load_dotenv()
 
 
-'''from huggingface_hub import login
-from transformers import AutoTokenizer, AutoModelForCausalLM
-from transformers import pipeline
-
-login(token = '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')
-
-tokenizer = AutoTokenizer.from_pretrained(
-"meta-llama/Meta-Llama-3-8B",
-cache_dir="/kaggle/working/"
-)
-
-model = AutoModelForCausalLM.from_pretrained(
-"meta-llama/Meta-Llama-3-8B",
-cache_dir="/kaggle/working/",
-device_map="auto",
-)'''
 
 model = os.getenv('LLM_MODEL', 'meta-llama/Meta-Llama-3.1-8B-Instruct')
 #Directory to chat with the local docuements in
 rag_directory = os.getenv('DIRECTORY', 'meeting_notes')
+hug_token = os.getenv('TOKEN')
 
 
 @st.cache_resource #We cache it with streamlit so that the modal doesnt instantiate when we rerun the code when the UI reoloads
 def get_local_model():
-    """return HuggingFaceEndpoint(
+    return HuggingFaceEndpoint(
         repo_id=model,
         task="text-generation",
         max_new_tokens=1024,
         do_sample=False
-    )"""
+    )
 
     #To run the model locally
-    return HuggingFacePipeline.from_model_id(
+    """return HuggingFacePipeline.from_model_id(
         model_id=model,
         task="text-generation",
         pipeline_kwargs={
@@ -55,7 +40,7 @@ def get_local_model():
             "top_k": 50,
             "temperature": 0.4
         }
-    )
+    )"""
 
 llm = get_local_model()
 
@@ -80,7 +65,7 @@ def get_chroma_instance():
     docs = load_documents(rag_directory)
 
     #create the open-source embedding function --> Para el tema de los vectores de la base de datos y tal
-    embedding_function = SentenceTransformerEmbeddings(model_name='all_MiniLM-L6-v2')
+    embedding_function = SentenceTransformerEmbeddings(model_name='all_MiniLM-L6-v2', token=hug_token)
 
     #load it into chroma
     return Chroma.from_documents(docs ,embedding_function)
