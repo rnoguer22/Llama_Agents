@@ -3,7 +3,7 @@ from crewai import Agent, Task, Crew, Process
 
 
 
-model = Ollama(model="llama3")
+model = Ollama(model="llama3.1")
 
 email = 'nigerian prince sending me some gold'
 
