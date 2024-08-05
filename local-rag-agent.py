@@ -10,19 +10,12 @@ import streamlit as st
 import json
 import os
 
-
-
 load_dotenv()
 
-
-
 model = os.getenv('LLM_MODEL', 'meta-llama/Meta-Llama-3.1-8B-Instruct')
-#Directory to chat with the local docuements in
 rag_directory = os.getenv('DIRECTORY', 'meeting_notes')
-hug_token = os.getenv('TOKEN')
 
-
-@st.cache_resource #We cache it with streamlit so that the modal doesnt instantiate when we rerun the code when the UI reoloads
+@st.cache_resource
 def get_local_model():
     return HuggingFaceEndpoint(
         repo_id=model,
@@ -31,48 +24,42 @@ def get_local_model():
         do_sample=False
     )
 
-    #To run the model locally
-    """return HuggingFacePipeline.from_model_id(
-        model_id=model,
-        task="text-generation",
-        pipeline_kwargs={
-            "max_new_tokens": 1024,
-            "top_k": 50,
-            "temperature": 0.4
-        }
-    )"""
+    # If you want to run the model absolutely locally - VERY resource intense!
+    # return HuggingFacePipeline.from_model_id(
+    #     model_id=model,
+    #     task="text-generation",
+    #     pipeline_kwargs={
+    #         "max_new_tokens": 1024,
+    #         "top_k": 50,
+    #         "temperature": 0.4
+    #     },
+    # )
 
 llm = get_local_model()
 
-
-
 def load_documents(directory):
-    #Load the pdf or txt documents from the directory
-    loader = DirectoryLoader(directory) #Hay otros muchos loaders en huggingface pero este es el + conveniente
+    # Load the PDF or txt documents from the directory
+    loader = DirectoryLoader(directory)
     documents = loader.load()
 
-    #Split the document into chunks --> Los separamos en chunks para que vaya + rapido
+    # Split the documents into chunks
     text_splitter = CharacterTextSplitter(chunk_size=1000, chunk_overlap=0)
     docs = text_splitter.split_documents(documents)
 
     return docs
 
-
-
-@st.cache_resource #Para que la base de datos de chroma corra en cache
+@st.cache_resource
 def get_chroma_instance():
-    #Obtenemos el documento dividido en chunks
+    # Get the documents split into chunks
     docs = load_documents(rag_directory)
 
-    #create the open-source embedding function --> Para el tema de los vectores de la base de datos y tal
+    # create the open-sourc e embedding function
     embedding_function = SentenceTransformerEmbeddings(model_name="all-MiniLM-L6-v2")
 
-    #load it into chroma
-    return Chroma.from_documents(docs ,embedding_function)
+    # load it into Chroma
+    return Chroma.from_documents(docs, embedding_function)
 
-db = get_chroma_instance()
-
-
+db = get_chroma_instance()  
 
 def query_documents(question):
     """
@@ -89,9 +76,7 @@ def query_documents(question):
     similar_docs = db.similarity_search(question, k=5)
     docs_formatted = list(map(lambda doc: f"Source: {doc.metadata.get('source', 'NA')}\nContent: {doc.page_content}", similar_docs))
 
-    return docs_formatted  
-
-
+    return docs_formatted   
 
 def prompt_ai(messages):
     # Fetch the relevant documents for the query
@@ -104,8 +89,6 @@ def prompt_ai(messages):
     ai_response = doc_chatbot.invoke(messages[:-1] + [HumanMessage(content=formatted_prompt)])
 
     return ai_response
-
-
 
 def main():
     st.title("Chat with Local Documents")
@@ -141,5 +124,5 @@ def main():
         
         st.session_state.messages.append(ai_response)
 
-if __name__ == 'main':
+if __name__ == "__main__":
     main()
