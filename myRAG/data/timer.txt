@@ -1,0 +1,46 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Timer    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Textbox UploadButton →  Timer gradio.Timer(···) Description Special component that ticks at regular intervals when active. It is not visible, and only used to trigger events at a regular interval through the tick event listener. Behavior As input component: The interval of the timer as a float. Your function should accept one of these types: def predict(
+	value: float | None
+)
+	...  As output component: The interval of the timer as a float or None. Your function should return one of these types: def predict(···) -> float | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Timer  "timer" Uses default values  Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Timer
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Timer.tick(fn, ···)  This listener is triggered at regular intervals defined by the Timer.  Event Parameters Parameters ▼     ← Textbox UploadButton →     Status  
+
+
+
+

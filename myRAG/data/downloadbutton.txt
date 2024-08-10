@@ -1,0 +1,89 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  DownloadButton    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← DateTime Dropdown →  DownloadButton gradio.DownloadButton(···) Description Creates a button, that when clicked, allows a user to download a single file of arbitrary type.  Behavior As input component: (Rarely used) passes the file as a str into the function. Your function should accept one of these types: def predict(
+	value: str | None
+)
+	...  As output component: Expects a str or pathlib.Path filepath Your function should return one of these types: def predict(···) -> str | Path | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.DownloadButton  "downloadbutton" Uses default values  Demos upload_and_download  Open in 🎢 ↗ from pathlib import Path
+import gradio as gr
+
+def upload_file(filepath):
+    name = Path(filepath).name
+    return [gr.UploadButton(visible=False), gr.DownloadButton(label=f"Download {name}", value=filepath, visible=True)]
+
+def download_file():
+    return [gr.UploadButton(visible=True), gr.DownloadButton(visible=False)]
+
+with gr.Blocks() as demo:
+    gr.Markdown("First upload a file and and then you'll be able download it (but only once!)")
+    with gr.Row():
+        u = gr.UploadButton("Upload a file", file_count="single")
+        d = gr.DownloadButton("Download the file", visible=False)
+
+    u.upload(upload_file, u, [u, d])
+    d.click(download_file, None, [u, d])
+
+if __name__ == "__main__":
+    demo.launch()
+ from pathlib import Path
+import gradio as gr
+
+def upload_file(filepath):
+    name = Path(filepath).name
+    return [gr.UploadButton(visible=False), gr.DownloadButton(label=f"Download {name}", value=filepath, visible=True)]
+
+def download_file():
+    return [gr.UploadButton(visible=True), gr.DownloadButton(visible=False)]
+
+with gr.Blocks() as demo:
+    gr.Markdown("First upload a file and and then you'll be able download it (but only once!)")
+    with gr.Row():
+        u = gr.UploadButton("Upload a file", file_count="single")
+        d = gr.DownloadButton("Download the file", visible=False)
+
+    u.upload(upload_file, u, [u, d])
+    d.click(download_file, None, [u, d])
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The DownloadButton
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description DownloadButton.click(fn, ···)  Triggered when the DownloadButton is clicked.  Event Parameters Parameters ▼     ← DateTime Dropdown →     Status  
+
+
+
+

@@ -1,0 +1,50 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Helpers  set_static_paths    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← on Error →  set_static_paths gradio.set_static_paths(···) Description Set the static paths to be served by the gradio app.  Static files are not moved to the gradio cache and are served directly from the file system. This function is useful when you want to serve files that you know will not be modified during the lifetime of the gradio app (like files used in gr.Examples). By setting static paths, your app will launch faster and it will consume less disk space. Calling this function will set the static paths for all gradio applications defined in the same interpreter session until it is called again or the session ends. To clear out the static paths, call this function with an empty list.  Example Usage import gradio as gr
+
+# Paths can be a list of strings or pathlib.Path objects
+# corresponding to filenames or directories.
+gr.set_static_paths(paths=["test/test_files/"])
+
+# The example files and the default value of the input
+# will not be copied to the gradio cache and will be served directly.
+demo = gr.Interface(
+    lambda s: s.rotate(45),
+    gr.Image(value="test/test_files/cheetah1.jpg", type="pil"),
+    gr.Image(),
+    examples=["test/test_files/bus.png"],
+)
+
+demo.launch() Initialization Parameters ▼   ← on Error →     Status  
+
+
+
+

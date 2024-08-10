@@ -1,0 +1,49 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Label    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← JSON LinePlot →  Label gradio.Label(···) import gradio as gr 
+with gr.Blocks() as demo:
+    gr.Label(value={"First Label": 0.7, "Second Label": 0.2, "Third Label": 0.1})
+demo.launch() Description Displays a classification label, along with confidence scores of top categories, if provided. As this component does not accept user input, it is rarely used as an input component.  Behavior As input component: Depending on the value, passes the label as a str | int | float, or the labels and confidences as a dict[str, float]. Your function should accept one of these types: def predict(
+	value: dict[str, float] | str | int | float | None
+)
+	...  As output component: Expects a dict[str, float] of classes and confidences, or str with just the class or an int | float for regression outputs, or a str path to a .json file containing a json dictionary in one of the preceding formats. Your function should return one of these types: def predict(···) -> dict[str, float] | str | int | float | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Label  "label" Uses default values  Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Label
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Label.change(fn, ···)  Triggered when the value of the Label changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Label.select(fn, ···)  Event listener for when the user selects or deselects the Label. Uses event data gradio.SelectData to carry value referring to the label of the Label, and selected to refer to state of the Label. See EventData documentation on how to use this event data  Event Parameters Parameters ▼    Guides Image Classification In Pytorch  Image Classification In Tensorflow  Image Classification With Vision Transformers   ← JSON LinePlot →     Status  
+
+
+
+

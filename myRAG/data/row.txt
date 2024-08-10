@@ -1,0 +1,39 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Blocks Layout  Row    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Group Tab →  Row gradio.Row(···) Description Row is a layout element within Blocks that renders all children horizontally. Example Usage with gr.Blocks() as demo:
+    with gr.Row():
+        gr.Image("lion.jpg", scale=2)
+        gr.Image("tiger.jpg", scale=1)
+demo.launch() Initialization Parameters ▼  Guides Controlling Layout   ← Group Tab →     Status  
+
+
+
+

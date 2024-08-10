@@ -1,0 +1,141 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Checkbox    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Chatbot CheckboxGroup →  Checkbox gradio.Checkbox(···) import gradio as gr 
+with gr.Blocks() as demo:
+    gr.Checkbox()
+demo.launch() Description Creates a checkbox that can be set to True or False. Can be used as an input to pass a boolean value to a function or as an output to display a boolean value.  Behavior As input component: Passes the status of the checkbox as a bool. Your function should accept one of these types: def predict(
+	value: bool | None
+)
+	...  As output component: Expects a bool value that is set as the status of the checkbox Your function should return one of these types: def predict(···) -> bool | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Checkbox  "checkbox" Uses default values  Demos sentence_builderhello_world_3  Open in 🎢 ↗ import gradio as gr
+
+def sentence_builder(quantity, animal, countries, place, activity_list, morning):
+    return f"""The {quantity} {animal}s from {" and ".join(countries)} went to the {place} where they {" and ".join(activity_list)} until the {"morning" if morning else "night"}"""
+
+demo = gr.Interface(
+    sentence_builder,
+    [
+        gr.Slider(2, 20, value=4, label="Count", info="Choose between 2 and 20"),
+        gr.Dropdown(
+            ["cat", "dog", "bird"], label="Animal", info="Will add more animals later!"
+        ),
+        gr.CheckboxGroup(["USA", "Japan", "Pakistan"], label="Countries", info="Where are they from?"),
+        gr.Radio(["park", "zoo", "road"], label="Location", info="Where did they go?"),
+        gr.Dropdown(
+            ["ran", "swam", "ate", "slept"], value=["swam", "slept"], multiselect=True, label="Activity", info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, nisl eget ultricies aliquam, nunc nisl aliquet nunc, eget aliquam nisl nunc vel nisl."
+        ),
+        gr.Checkbox(label="Morning", info="Did they do it in the morning?"),
+    ],
+    "text",
+    examples=[
+        [2, "cat", ["Japan", "Pakistan"], "park", ["ate", "swam"], True],
+        [4, "dog", ["Japan"], "zoo", ["ate", "swam"], False],
+        [10, "bird", ["USA", "Pakistan"], "road", ["ran"], False],
+        [8, "cat", ["Pakistan"], "zoo", ["ate"], True],
+    ]
+)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def sentence_builder(quantity, animal, countries, place, activity_list, morning):
+    return f"""The {quantity} {animal}s from {" and ".join(countries)} went to the {place} where they {" and ".join(activity_list)} until the {"morning" if morning else "night"}"""
+
+demo = gr.Interface(
+    sentence_builder,
+    [
+        gr.Slider(2, 20, value=4, label="Count", info="Choose between 2 and 20"),
+        gr.Dropdown(
+            ["cat", "dog", "bird"], label="Animal", info="Will add more animals later!"
+        ),
+        gr.CheckboxGroup(["USA", "Japan", "Pakistan"], label="Countries", info="Where are they from?"),
+        gr.Radio(["park", "zoo", "road"], label="Location", info="Where did they go?"),
+        gr.Dropdown(
+            ["ran", "swam", "ate", "slept"], value=["swam", "slept"], multiselect=True, label="Activity", info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, nisl eget ultricies aliquam, nunc nisl aliquet nunc, eget aliquam nisl nunc vel nisl."
+        ),
+        gr.Checkbox(label="Morning", info="Did they do it in the morning?"),
+    ],
+    "text",
+    examples=[
+        [2, "cat", ["Japan", "Pakistan"], "park", ["ate", "swam"], True],
+        [4, "dog", ["Japan"], "zoo", ["ate", "swam"], False],
+        [10, "bird", ["USA", "Pakistan"], "road", ["ran"], False],
+        [8, "cat", ["Pakistan"], "zoo", ["ate"], True],
+    ]
+)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+
+def greet(name, is_morning, temperature):
+    salutation = "Good morning" if is_morning else "Good evening"
+    greeting = f"{salutation} {name}. It is {temperature} degrees today"
+    celsius = (temperature - 32) * 5 / 9
+    return greeting, round(celsius, 2)
+
+demo = gr.Interface(
+    fn=greet,
+    inputs=["text", "checkbox", gr.Slider(0, 100)],
+    outputs=["text", "number"],
+)
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def greet(name, is_morning, temperature):
+    salutation = "Good morning" if is_morning else "Good evening"
+    greeting = f"{salutation} {name}. It is {temperature} degrees today"
+    celsius = (temperature - 32) * 5 / 9
+    return greeting, round(celsius, 2)
+
+demo = gr.Interface(
+    fn=greet,
+    inputs=["text", "checkbox", gr.Slider(0, 100)],
+    outputs=["text", "number"],
+)
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Checkbox
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Checkbox.change(fn, ···)  Triggered when the value of the Checkbox changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Checkbox.input(fn, ···)  This listener is triggered when the user changes the value of the Checkbox. Checkbox.select(fn, ···)  Event listener for when the user selects or deselects the Checkbox. Uses event data gradio.SelectData to carry value referring to the label of the Checkbox, and selected to refer to state of the Checkbox. See EventData documentation on how to use this event data  Event Parameters Parameters ▼     ← Chatbot CheckboxGroup →     Status  
+
+
+
+

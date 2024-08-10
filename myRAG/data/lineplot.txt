@@ -1,0 +1,108 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  LinePlot    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Label LoginButton →  LinePlot gradio.LinePlot(···) import gradio as gr
+import pandas as pd
+import numpy as np
+simple = pd.DataFrame(np.array(
+    [
+        [1, 28],
+        [2, 55],
+        [3, 43],
+        [4, 91],
+        [5, 81],
+        [6, 53],
+        [7, 19],
+        [8, 87],
+        [9, 52],
+    ]
+), columns=["week", "price"])
+with gr.Blocks() as demo:
+    gr.LinePlot(
+        value=simple,
+        x="week",
+        y="price",
+        title="Stock Price Chart",
+        container=True,
+        width=400
+    )
+demo.launch()
+pandas
+numpy Description Creates a line plot component to display data from a pandas DataFrame.  Behavior As input component: The data to display in a line plot. Your function should accept one of these types: def predict(
+	value: AltairPlotData | None
+)
+	...  As output component: Expects a pandas DataFrame containing the data to display in the line plot. The DataFrame should contain at least two columns, one for the x-axis (corresponding to this component's x argument) and one for the y-axis (corresponding to y). Your function should return one of these types: def predict(···) -> pd.DataFrame | dict | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.LinePlot  "lineplot" Uses default values  Demos native_plots  Open in 🎢 ↗ import gradio as gr
+
+from scatter_plot_demo import scatter_plots
+from line_plot_demo import line_plots
+from bar_plot_demo import bar_plots
+
+with gr.Blocks() as demo:
+    with gr.Tabs():
+        with gr.TabItem("Line Plot"):
+            line_plots.render()
+        with gr.TabItem("Scatter Plot"):
+            scatter_plots.render()
+        with gr.TabItem("Bar Plot"):
+            bar_plots.render()
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+from scatter_plot_demo import scatter_plots
+from line_plot_demo import line_plots
+from bar_plot_demo import bar_plots
+
+with gr.Blocks() as demo:
+    with gr.Tabs():
+        with gr.TabItem("Line Plot"):
+            line_plots.render()
+        with gr.TabItem("Scatter Plot"):
+            scatter_plots.render()
+        with gr.TabItem("Bar Plot"):
+            bar_plots.render()
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The LinePlot
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description LinePlot.select(fn, ···)  Event listener for when the user selects or deselects the NativePlot. Uses event data gradio.SelectData to carry value referring to the label of the NativePlot, and selected to refer to state of the NativePlot. See EventData documentation on how to use this event data LinePlot.double_click(fn, ···)  Triggered when the NativePlot is double clicked.  Event Parameters Parameters ▼     ← Label LoginButton →     Status  
+
+
+
+

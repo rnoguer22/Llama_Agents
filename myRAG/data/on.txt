@@ -1,0 +1,49 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Helpers  on    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← make_waveform set_static_paths →  on gradio.on(···) Description Sets up an event listener that triggers a function when the specified event(s) occur. This is especially useful when the same function should be triggered by multiple events. Only a single API endpoint is generated for all events in the triggers list.  Example Usage import gradio as gr
+
+with gr.Blocks() as demo:
+    with gr.Row():
+        input = gr.Textbox()
+        button = gr.Button("Submit")
+    output = gr.Textbox()
+    gr.on(
+        triggers=[button.click, input.submit],
+        fn=lambda x: x,
+        inputs=[input],
+        outputs=[output]
+    )
+
+demo.launch() Initialization Parameters ▼   ← make_waveform set_static_paths →     Status  
+
+
+
+

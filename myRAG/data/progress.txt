@@ -1,0 +1,45 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Helpers  Progress    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← FileData Examples →  Progress gradio.Progress(···) Description The Progress class provides a custom progress tracker that is used in a function signature. To attach a Progress tracker to a function, simply add a parameter right after the input parameters that has a default value set to a gradio.Progress() instance. The Progress tracker can then be updated in the function by calling the Progress object or using the tqdm method on an Iterable. The Progress tracker is currently only available with queue(). Example Usage import gradio as gr
+import time
+def my_function(x, progress=gr.Progress()):
+    progress(0, desc="Starting...")
+    time.sleep(1)
+    for i in progress.tqdm(range(100)):
+        time.sleep(0.1)
+    return x
+gr.Interface(my_function, gr.Textbox(), gr.Textbox()).queue().launch() Initialization Parameters ▼  Methods  __call__  gradio.Progress.__call__(progress, ···) Description
+		 Updates progress tracker with progress and message text. Parameters ▼  tqdm  gradio.Progress.tqdm(iterable, ···) Description
+		 Attaches progress tracker to iterable, like tqdm. Parameters ▼    ← FileData Examples →     Status  
+
+
+
+

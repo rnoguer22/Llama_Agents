@@ -1,0 +1,170 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Helpers  EventData    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Video DeletedFileData →  EventData gradio.EventData(···) Description When gr.EventData or one of its subclasses is added as a type hint to an argument of a prediction function, a gr.EventData object will automatically be passed as the value of that argument. The attributes of this object contains information about the event that triggered the listener. The gr.EventData object itself contains a .target attribute that refers to the component that triggered the event, while subclasses of gr.EventData contains additional attributes that are different for each class.  Example Usage import gradio as gr
+
+with gr.Blocks() as demo:
+    table = gr.Dataframe([[1, 2, 3], [4, 5, 6]])
+    gallery = gr.Gallery([("cat.jpg", "Cat"), ("dog.jpg", "Dog")])
+    textbox = gr.Textbox("Hello World!")
+    statement = gr.Textbox()
+
+    def on_select(value, evt: gr.EventData):
+        return f"The {evt.target} component was selected, and its value was {value}."
+
+    table.select(on_select, table, statement)
+    gallery.select(on_select, gallery, statement)
+    textbox.select(on_select, textbox, statement)
+
+demo.launch() Attributes Parameters ▼  Demos gallery_selectionstictactoe  Open in 🎢 ↗ import gradio as gr
+import numpy as np
+
+with gr.Blocks() as demo:
+    imgs = gr.State()
+    gallery = gr.Gallery(allow_preview=False)
+
+    def deselect_images():
+        return gr.Gallery(selected_index=None)
+
+    def generate_images():
+        images = []
+        for _ in range(9):
+            image = np.ones((100, 100, 3), dtype=np.uint8) * np.random.randint(
+                0, 255, 3
+            )  # image is a solid single color
+            images.append(image)
+        return images, images
+
+    demo.load(generate_images, None, [gallery, imgs])
+
+    with gr.Row():
+        selected = gr.Number(show_label=False)
+        darken_btn = gr.Button("Darken selected")
+    deselect_button = gr.Button("Deselect")
+
+    deselect_button.click(deselect_images, None, gallery)
+
+    def get_select_index(evt: gr.SelectData):
+        return evt.index
+
+    gallery.select(get_select_index, None, selected)
+
+    def darken_img(imgs, index):
+        index = int(index)
+        imgs[index] = np.round(imgs[index] * 0.8).astype(np.uint8)
+        return imgs, imgs
+
+    darken_btn.click(darken_img, [imgs, selected], [imgs, gallery])
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+import numpy as np
+
+with gr.Blocks() as demo:
+    imgs = gr.State()
+    gallery = gr.Gallery(allow_preview=False)
+
+    def deselect_images():
+        return gr.Gallery(selected_index=None)
+
+    def generate_images():
+        images = []
+        for _ in range(9):
+            image = np.ones((100, 100, 3), dtype=np.uint8) * np.random.randint(
+                0, 255, 3
+            )  # image is a solid single color
+            images.append(image)
+        return images, images
+
+    demo.load(generate_images, None, [gallery, imgs])
+
+    with gr.Row():
+        selected = gr.Number(show_label=False)
+        darken_btn = gr.Button("Darken selected")
+    deselect_button = gr.Button("Deselect")
+
+    deselect_button.click(deselect_images, None, gallery)
+
+    def get_select_index(evt: gr.SelectData):
+        return evt.index
+
+    gallery.select(get_select_index, None, selected)
+
+    def darken_img(imgs, index):
+        index = int(index)
+        imgs[index] = np.round(imgs[index] * 0.8).astype(np.uint8)
+        return imgs, imgs
+
+    darken_btn.click(darken_img, [imgs, selected], [imgs, gallery])
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+
+with gr.Blocks() as demo:
+    turn = gr.Textbox("X", interactive=False, label="Turn")
+    board = gr.Dataframe(value=[["", "", ""]] * 3, interactive=False, type="array")
+
+    def place(board: list[list[int]], turn, evt: gr.SelectData):  
+        if evt.value:
+            return board, turn
+        board[evt.index[0]][evt.index[1]] = turn
+        turn = "O" if turn == "X" else "X"
+        return board, turn
+
+    board.select(place, [board, turn], [board, turn], show_progress="hidden")
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+with gr.Blocks() as demo:
+    turn = gr.Textbox("X", interactive=False, label="Turn")
+    board = gr.Dataframe(value=[["", "", ""]] * 3, interactive=False, type="array")
+
+    def place(board: list[list[int]], turn, evt: gr.SelectData):  
+        if evt.value:
+            return board, turn
+        board[evt.index[0]][evt.index[1]] = turn
+        turn = "O" if turn == "X" else "X"
+        return board, turn
+
+    board.select(place, [board, turn], [board, turn], show_progress="hidden")
+
+if __name__ == "__main__":
+    demo.launch()
+
+		     ← Video DeletedFileData →     Status  
+
+
+
+

@@ -1,0 +1,223 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  JSON    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← ImageEditor Label →  JSON gradio.JSON(···) import gradio as gr
+import numpy as np
+with gr.Blocks() as demo:
+    out = gr.JSON(value={
+            "Key 1": "Value 1",
+            "Key 2": {"Key 3": "Value 2", "Key 4": "Value 3"},
+            "Key 5": ["Item 1", "Item 2", "Item 3"],
+            "Key 6": 123,
+            "Key 7": 123.456,
+            "Key 8": True,
+            "Key 9": False,
+            "Key 10": None,
+            "Key 11": np.array([1, 2, 3]),
+        })
+demo.launch()
+numpy Description Used to display arbitrary JSON output prettily. As this component does not accept user input, it is rarely used as an input component.  Behavior As input component: Passes the JSON value as a dict or list depending on the value. Your function should accept one of these types: def predict(
+	value: dict | list | None
+)
+	...  As output component: Expects a valid JSON str -- or a list or dict that can be serialized to a JSON string. The list or dict value can contain numpy arrays. Your function should return one of these types: def predict(···) -> dict | list | str | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.JSON  "json" Uses default values  Demos zip_to_jsonblocks_xray  Open in 🎢 ↗ from zipfile import ZipFile
+
+import gradio as gr
+
+def zip_to_json(file_obj):
+    files = []
+    with ZipFile(file_obj.name) as zfile:
+        for zinfo in zfile.infolist():
+            files.append(
+                {
+                    "name": zinfo.filename,
+                    "file_size": zinfo.file_size,
+                    "compressed_size": zinfo.compress_size,
+                }
+            )
+    return files
+
+demo = gr.Interface(zip_to_json, "file", "json")
+
+if __name__ == "__main__":
+    demo.launch()
+ from zipfile import ZipFile
+
+import gradio as gr
+
+def zip_to_json(file_obj):
+    files = []
+    with ZipFile(file_obj.name) as zfile:
+        for zinfo in zfile.infolist():
+            files.append(
+                {
+                    "name": zinfo.filename,
+                    "file_size": zinfo.file_size,
+                    "compressed_size": zinfo.compress_size,
+                }
+            )
+    return files
+
+demo = gr.Interface(zip_to_json, "file", "json")
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+
+disease_values = [0.25, 0.5, 0.75]
+
+def xray_model(diseases, img):
+    return [{disease: disease_values[idx] for idx,disease in enumerate(diseases)}]
+
+def ct_model(diseases, img):
+    return [{disease: 0.1 for disease in diseases}]
+
+with gr.Blocks(fill_width=True) as demo:
+    gr.Markdown(
+        """
+# Detect Disease From Scan
+With this model you can lorem ipsum
+- ipsum 1
+- ipsum 2
+"""
+    )
+    gr.DuplicateButton()
+    disease = gr.CheckboxGroup(
+        info="Select the diseases you want to scan for.",
+        choices=["Covid", "Malaria", "Lung Cancer"], label="Disease to Scan For"
+    )
+    slider = gr.Slider(0, 100)
+
+    with gr.Tab("X-ray") as x_tab:
+        with gr.Row():
+            xray_scan = gr.Image()
+            xray_results = gr.JSON()
+        xray_run = gr.Button("Run")
+        xray_run.click(
+            xray_model,
+            inputs=[disease, xray_scan],
+            outputs=xray_results,
+            api_name="xray_model"
+        )
+
+    with gr.Tab("CT Scan"):
+        with gr.Row():
+            ct_scan = gr.Image()
+            ct_results = gr.JSON()
+        ct_run = gr.Button("Run")
+        ct_run.click(
+            ct_model,
+            inputs=[disease, ct_scan],
+            outputs=ct_results,
+            api_name="ct_model"
+        )
+
+    upload_btn = gr.Button("Upload Results", variant="primary")
+    upload_btn.click(
+        lambda ct, xr: None,
+        inputs=[ct_results, xray_results],
+        outputs=[],
+    )
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+disease_values = [0.25, 0.5, 0.75]
+
+def xray_model(diseases, img):
+    return [{disease: disease_values[idx] for idx,disease in enumerate(diseases)}]
+
+def ct_model(diseases, img):
+    return [{disease: 0.1 for disease in diseases}]
+
+with gr.Blocks(fill_width=True) as demo:
+    gr.Markdown(
+        """
+# Detect Disease From Scan
+With this model you can lorem ipsum
+- ipsum 1
+- ipsum 2
+"""
+    )
+    gr.DuplicateButton()
+    disease = gr.CheckboxGroup(
+        info="Select the diseases you want to scan for.",
+        choices=["Covid", "Malaria", "Lung Cancer"], label="Disease to Scan For"
+    )
+    slider = gr.Slider(0, 100)
+
+    with gr.Tab("X-ray") as x_tab:
+        with gr.Row():
+            xray_scan = gr.Image()
+            xray_results = gr.JSON()
+        xray_run = gr.Button("Run")
+        xray_run.click(
+            xray_model,
+            inputs=[disease, xray_scan],
+            outputs=xray_results,
+            api_name="xray_model"
+        )
+
+    with gr.Tab("CT Scan"):
+        with gr.Row():
+            ct_scan = gr.Image()
+            ct_results = gr.JSON()
+        ct_run = gr.Button("Run")
+        ct_run.click(
+            ct_model,
+            inputs=[disease, ct_scan],
+            outputs=ct_results,
+            api_name="ct_model"
+        )
+
+    upload_btn = gr.Button("Upload Results", variant="primary")
+    upload_btn.click(
+        lambda ct, xr: None,
+        inputs=[ct_results, xray_results],
+        outputs=[],
+    )
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The JSON
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description JSON.change(fn, ···)  Triggered when the value of the JSON changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input.  Event Parameters Parameters ▼     ← ImageEditor Label →     Status  
+
+
+
+

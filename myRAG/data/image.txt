@@ -1,0 +1,131 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Image    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← HTML ImageEditor →  Image gradio.Image(···) import gradio as gr 
+with gr.Blocks() as demo:
+    gr.Image()
+demo.launch() Description Creates an image component that can be used to upload images (as an input) or display images (as an output).  Behavior As input component: Passes the uploaded image as a numpy.array, PIL.Image or str filepath depending on type. For SVGs, the type parameter is ignored and the filepath of the SVG is returned. Your function should accept one of these types: def predict(
+	value: np.ndarray | PIL.Image.Image | str | None
+)
+	...  As output component: Expects a numpy.array, PIL.Image, or str or pathlib.Path filepath to an image which is displayed. Your function should return one of these types: def predict(···) -> np.ndarray | PIL.Image.Image | str | Path | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Image  "image" Uses default values  GIF and SVG Image Formats The gr.Image component can process or display any image format that is supported by the PIL library, including animated GIFs. In addition, it also supports the SVG image format. When the gr.Image component is used as an input component, the image is converted into a str filepath, a PIL.Image object, or a numpy.array, depending on the type parameter. However, animated GIF and SVG images are treated differently: Animated GIF images can only be converted to str filepaths or PIL.Image objects. If they are converted to a numpy.array (which is the default behavior), only the first frame will be used. So if your demo expects an input GIF image, make sure to set the type parameter accordingly, e.g. import gradio as gr
+
+demo = gr.Interface(
+    fn=lambda x:x, 
+    inputs=gr.Image(type="filepath"), 
+    outputs=gr.Image()
+)
+    
+demo.launch() For SVG images, the type parameter is ignored altogether and the image is always returned as an image filepath. This is because SVG images cannot be processed as PIL.Image or numpy.array objects. Demos sepia_filterfake_diffusion  Open in 🎢 ↗ import numpy as np
+import gradio as gr
+
+def sepia(input_img):
+    sepia_filter = np.array([
+        [0.393, 0.769, 0.189],
+        [0.349, 0.686, 0.168],
+        [0.272, 0.534, 0.131]
+    ])
+    sepia_img = input_img.dot(sepia_filter.T)
+    sepia_img /= sepia_img.max()
+    return sepia_img
+
+demo = gr.Interface(sepia, gr.Image(), "image")
+if __name__ == "__main__":
+    demo.launch()
+ import numpy as np
+import gradio as gr
+
+def sepia(input_img):
+    sepia_filter = np.array([
+        [0.393, 0.769, 0.189],
+        [0.349, 0.686, 0.168],
+        [0.272, 0.534, 0.131]
+    ])
+    sepia_img = input_img.dot(sepia_filter.T)
+    sepia_img /= sepia_img.max()
+    return sepia_img
+
+demo = gr.Interface(sepia, gr.Image(), "image")
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+import numpy as np
+import time
+
+def fake_diffusion(steps):
+    rng = np.random.default_rng()
+    for i in range(steps):
+        time.sleep(1)
+        image = rng.random(size=(600, 600, 3))
+        yield image
+    image = np.ones((1000,1000,3), np.uint8)
+    image[:] = [255, 124, 0]
+    yield image
+
+demo = gr.Interface(fake_diffusion,
+                    inputs=gr.Slider(1, 10, 3, step=1),
+                    outputs="image")
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+import numpy as np
+import time
+
+def fake_diffusion(steps):
+    rng = np.random.default_rng()
+    for i in range(steps):
+        time.sleep(1)
+        image = rng.random(size=(600, 600, 3))
+        yield image
+    image = np.ones((1000,1000,3), np.uint8)
+    image[:] = [255, 124, 0]
+    yield image
+
+demo = gr.Interface(fake_diffusion,
+                    inputs=gr.Slider(1, 10, 3, step=1),
+                    outputs="image")
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Image
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Image.clear(fn, ···)  This listener is triggered when the user clears the Image using the X button for the component. Image.change(fn, ···)  Triggered when the value of the Image changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Image.stream(fn, ···)  This listener is triggered when the user streams the Image. Image.select(fn, ···)  Event listener for when the user selects or deselects the Image. Uses event data gradio.SelectData to carry value referring to the label of the Image, and selected to refer to state of the Image. See EventData documentation on how to use this event data Image.upload(fn, ···)  This listener is triggered when the user uploads a file into the Image. Image.input(fn, ···)  This listener is triggered when the user changes the value of the Image.  Event Parameters Parameters ▼    Guides Image Classification In Pytorch  Image Classification In Tensorflow  Image Classification With Vision Transformers  Create Your Own Friends With A Gan   ← HTML ImageEditor →     Status  
+
+
+
+

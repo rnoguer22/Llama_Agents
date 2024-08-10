@@ -1,0 +1,81 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Dataset    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Dataframe DateTime →  Dataset gradio.Dataset(···) import gradio as gr
+with gr.Blocks() as demo:
+    gr.Dataset(components=[gr.Textbox(visible=False)],
+        label="Text Dataset",
+        samples=[
+            ["The quick brown fox jumps over the lazy dog"],
+            ["Build & share delightful machine learning apps"],
+            ["She sells seashells by the seashore"],
+            ["Supercalifragilisticexpialidocious"],
+            ["Lorem ipsum"],
+            ["That's all folks!"]
+        ],
+    )
+demo.launch() Description Creates a gallery or table to display data samples. This component is primarily designed for internal use to display examples. However, it can also be used directly to display a dataset and let users select examples. Behavior As input component: Passes the selected sample either as a list of data corresponding to each input component (if type is "value") or as an int index (if type is "index"), or as a tuple of the index and the data (if type is "tuple"). Your function should accept one of these types: def predict(
+	value: int | list | None
+)
+	...  As output component: Expects an int index or list of sample data. Returns the index of the sample in the dataset or None if the sample is not found. Your function should return one of these types: def predict(···) -> list[list]
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Dataset  "dataset" Uses default values  Examples Updating a Dataset In this example, we display a text dataset using gr.Dataset and then update it when the user clicks a button: import gradio as gr
+
+philosophy_quotes = [
+    ["I think therefore I am."],
+    ["The unexamined life is not worth living."]
+]
+
+startup_quotes = [
+    ["Ideas are easy. Implementation is hard"],
+    ["Make mistakes faster."]
+]
+
+def show_startup_quotes():
+    return gr.Dataset(samples=startup_quotes)
+
+with gr.Blocks() as demo:
+    textbox = gr.Textbox()
+    dataset = gr.Dataset(components=[textbox], samples=philosophy_quotes)
+    button = gr.Button()
+
+    button.click(show_startup_quotes, None, dataset)
+
+demo.launch() Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Dataset
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Dataset.click(fn, ···)  Triggered when the Dataset is clicked. Dataset.select(fn, ···)  Event listener for when the user selects or deselects the Dataset. Uses event data gradio.SelectData to carry value referring to the label of the Dataset, and selected to refer to state of the Dataset. See EventData documentation on how to use this event data  Event Parameters Parameters ▼     ← Dataframe DateTime →     Status  
+
+
+
+

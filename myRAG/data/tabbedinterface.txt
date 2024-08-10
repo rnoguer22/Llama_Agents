@@ -1,0 +1,54 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Building Demos  TabbedInterface    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← ChatInterface Blocks →  TabbedInterface gradio.TabbedInterface(interface_list, ···) Description A TabbedInterface is created by providing a list of Interfaces or Blocks, each of which gets rendered in a separate tab. Only the components from the Interface/Blocks will be rendered in the tab. Certain high-level attributes of the Blocks (e.g. custom css, js, and head attributes) will not be loaded.  Initialization Parameters ▼  Demos tabbed_interface_lite  Open in 🎢 ↗ import gradio as gr
+
+hello_world = gr.Interface(lambda name: "Hello " + name, "text", "text")
+bye_world = gr.Interface(lambda name: "Bye " + name, "text", "text")
+
+demo = gr.TabbedInterface([hello_world, bye_world], ["Hello World", "Bye World"])
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+hello_world = gr.Interface(lambda name: "Hello " + name, "text", "text")
+bye_world = gr.Interface(lambda name: "Bye " + name, "text", "text")
+
+demo = gr.TabbedInterface([hello_world, bye_world], ["Hello World", "Bye World"])
+
+if __name__ == "__main__":
+    demo.launch()
+
+		     ← ChatInterface Blocks →     Status  
+
+
+
+

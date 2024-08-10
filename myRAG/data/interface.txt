@@ -1,0 +1,135 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Building Demos  Interface    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History  ChatInterface →  Interface gradio.Interface(···) Description Interface is Gradio's main high-level class, and allows you to create a web-based GUI / demo around a machine learning model (or any Python function) in a few lines of code. You must specify three parameters: (1) the function to create a GUI for (2) the desired input components and (3) the desired output components. Additional parameters can be used to control the appearance and behavior of the demo.  Example Usage import gradio as gr
+
+def image_classifier(inp):
+    return {'cat': 0.3, 'dog': 0.7}
+
+demo = gr.Interface(fn=image_classifier, inputs="image", outputs="label")
+demo.launch() Initialization Parameters ▼  Demos hello_worldhello_world_2hello_world_3  Open in 🎢 ↗ import gradio as gr
+
+def greet(name):
+    return "Hello " + name + "!"
+
+demo = gr.Interface(fn=greet, inputs="textbox", outputs="textbox")
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def greet(name):
+    return "Hello " + name + "!"
+
+demo = gr.Interface(fn=greet, inputs="textbox", outputs="textbox")
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+
+def greet(name, intensity):
+    return "Hello, " + name + "!" * intensity
+
+demo = gr.Interface(
+    fn=greet,
+    inputs=["text", gr.Slider(value=2, minimum=1, maximum=10, step=1)],
+    outputs=[gr.Textbox(label="greeting", lines=3)],
+)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def greet(name, intensity):
+    return "Hello, " + name + "!" * intensity
+
+demo = gr.Interface(
+    fn=greet,
+    inputs=["text", gr.Slider(value=2, minimum=1, maximum=10, step=1)],
+    outputs=[gr.Textbox(label="greeting", lines=3)],
+)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+
+def greet(name, is_morning, temperature):
+    salutation = "Good morning" if is_morning else "Good evening"
+    greeting = f"{salutation} {name}. It is {temperature} degrees today"
+    celsius = (temperature - 32) * 5 / 9
+    return greeting, round(celsius, 2)
+
+demo = gr.Interface(
+    fn=greet,
+    inputs=["text", "checkbox", gr.Slider(0, 100)],
+    outputs=["text", "number"],
+)
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def greet(name, is_morning, temperature):
+    salutation = "Good morning" if is_morning else "Good evening"
+    greeting = f"{salutation} {name}. It is {temperature} degrees today"
+    celsius = (temperature - 32) * 5 / 9
+    return greeting, round(celsius, 2)
+
+demo = gr.Interface(
+    fn=greet,
+    inputs=["text", "checkbox", gr.Slider(0, 100)],
+    outputs=["text", "number"],
+)
+if __name__ == "__main__":
+    demo.launch()
+
+		    Methods  launch  gradio.Interface.launch(···) Description
+		 Launches a simple web server that serves the demo. Can also be used to create a public link used by anyone to access the demo from their browser by setting share=True. <br> Example Usage
+			 import gradio as gr
+def reverse(text):
+    return text[::-1]
+demo = gr.Interface(reverse, "text", "text")
+demo.launch(share=True, auth=("username", "password")) Parameters ▼  load  gradio.Interface.load(block, ···) Description
+		 This listener is triggered when the Interface initially loads in the browser. Parameters ▼  from_pipeline  gradio.Interface.from_pipeline(pipeline, ···) Description
+		 Class method that constructs an Interface from a Hugging Face transformers.Pipeline or diffusers.DiffusionPipeline object. The input and output components are automatically determined from the pipeline. Example Usage
+			 import gradio as gr
+from transformers import pipeline
+pipe = pipeline("image-classification")
+gr.Interface.from_pipeline(pipe).launch() Parameters ▼  integrate  gradio.Interface.integrate(···) Description
+		 A catch-all method for integrating with other libraries. This method should be run after launch() Parameters ▼  queue  gradio.Interface.queue(···) Description
+		 By enabling the queue you can control when users know their position in the queue, and set a limit on maximum number of events allowed. Example Usage
+			 demo = gr.Interface(image_generator, gr.Textbox(), gr.Image())
+demo.queue(max_size=20)
+demo.launch() Parameters ▼   Guides Quickstart  Sharing Your App  Interface State  Reactive Interfaces    ChatInterface →     Status  
+
+
+
+

@@ -1,0 +1,221 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Slider    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← SimpleImage State →  Slider gradio.Slider(···) import gradio as gr 
+with gr.Blocks() as demo:
+    gr.Slider()
+demo.launch() Description Creates a slider that ranges from minimum to maximum with a step size of step.  Behavior As input component: Passes slider value as a float into the function. Your function should accept one of these types: def predict(
+	value: float
+)
+	...  As output component: Expects an int or float returned from function and sets slider value to it as long as it is within range (otherwise, sets to minimum value). Your function should return one of these types: def predict(···) -> float | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Slider  "slider" Uses default values  Demos sentence_builderslider_releaseinterface_random_sliderblocks_random_slider  Open in 🎢 ↗ import gradio as gr
+
+def sentence_builder(quantity, animal, countries, place, activity_list, morning):
+    return f"""The {quantity} {animal}s from {" and ".join(countries)} went to the {place} where they {" and ".join(activity_list)} until the {"morning" if morning else "night"}"""
+
+demo = gr.Interface(
+    sentence_builder,
+    [
+        gr.Slider(2, 20, value=4, label="Count", info="Choose between 2 and 20"),
+        gr.Dropdown(
+            ["cat", "dog", "bird"], label="Animal", info="Will add more animals later!"
+        ),
+        gr.CheckboxGroup(["USA", "Japan", "Pakistan"], label="Countries", info="Where are they from?"),
+        gr.Radio(["park", "zoo", "road"], label="Location", info="Where did they go?"),
+        gr.Dropdown(
+            ["ran", "swam", "ate", "slept"], value=["swam", "slept"], multiselect=True, label="Activity", info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, nisl eget ultricies aliquam, nunc nisl aliquet nunc, eget aliquam nisl nunc vel nisl."
+        ),
+        gr.Checkbox(label="Morning", info="Did they do it in the morning?"),
+    ],
+    "text",
+    examples=[
+        [2, "cat", ["Japan", "Pakistan"], "park", ["ate", "swam"], True],
+        [4, "dog", ["Japan"], "zoo", ["ate", "swam"], False],
+        [10, "bird", ["USA", "Pakistan"], "road", ["ran"], False],
+        [8, "cat", ["Pakistan"], "zoo", ["ate"], True],
+    ]
+)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def sentence_builder(quantity, animal, countries, place, activity_list, morning):
+    return f"""The {quantity} {animal}s from {" and ".join(countries)} went to the {place} where they {" and ".join(activity_list)} until the {"morning" if morning else "night"}"""
+
+demo = gr.Interface(
+    sentence_builder,
+    [
+        gr.Slider(2, 20, value=4, label="Count", info="Choose between 2 and 20"),
+        gr.Dropdown(
+            ["cat", "dog", "bird"], label="Animal", info="Will add more animals later!"
+        ),
+        gr.CheckboxGroup(["USA", "Japan", "Pakistan"], label="Countries", info="Where are they from?"),
+        gr.Radio(["park", "zoo", "road"], label="Location", info="Where did they go?"),
+        gr.Dropdown(
+            ["ran", "swam", "ate", "slept"], value=["swam", "slept"], multiselect=True, label="Activity", info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, nisl eget ultricies aliquam, nunc nisl aliquet nunc, eget aliquam nisl nunc vel nisl."
+        ),
+        gr.Checkbox(label="Morning", info="Did they do it in the morning?"),
+    ],
+    "text",
+    examples=[
+        [2, "cat", ["Japan", "Pakistan"], "park", ["ate", "swam"], True],
+        [4, "dog", ["Japan"], "zoo", ["ate", "swam"], False],
+        [10, "bird", ["USA", "Pakistan"], "road", ["ran"], False],
+        [8, "cat", ["Pakistan"], "zoo", ["ate"], True],
+    ]
+)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+
+def identity(x, state):
+    state += 1
+    return x, state, state
+
+with gr.Blocks() as demo:
+    slider = gr.Slider(0, 100, step=0.1)
+    state = gr.State(value=0)
+    with gr.Row():
+        number = gr.Number(label="On release")
+        number2 = gr.Number(label="Number of events fired")
+    slider.release(identity, inputs=[slider, state], outputs=[number, state, number2], api_name="predict")
+
+if __name__ == "__main__":
+    print("here")
+    demo.launch()
+    print(demo.server_port)
+ import gradio as gr
+
+def identity(x, state):
+    state += 1
+    return x, state, state
+
+with gr.Blocks() as demo:
+    slider = gr.Slider(0, 100, step=0.1)
+    state = gr.State(value=0)
+    with gr.Row():
+        number = gr.Number(label="On release")
+        number2 = gr.Number(label="Number of events fired")
+    slider.release(identity, inputs=[slider, state], outputs=[number, state, number2], api_name="predict")
+
+if __name__ == "__main__":
+    print("here")
+    demo.launch()
+    print(demo.server_port)
+
+		    Open in 🎢 ↗ import gradio as gr
+
+def func(slider_1, slider_2, *args):
+    return slider_1 + slider_2 * 5
+
+demo = gr.Interface(
+    func,
+    [
+        gr.Slider(minimum=1.5, maximum=250000.89, randomize=True, label="Random Big Range"),
+        gr.Slider(minimum=-1, maximum=1, randomize=True, step=0.05, label="Random only multiple of 0.05 allowed"),
+        gr.Slider(minimum=0, maximum=1, randomize=True, step=0.25, label="Random only multiples of 0.25 allowed"),
+        gr.Slider(minimum=-100, maximum=100, randomize=True, step=3, label="Random between -100 and 100 step 3"),
+        gr.Slider(minimum=-100, maximum=100, randomize=True, label="Random between -100 and 100"),
+        gr.Slider(value=0.25, minimum=5, maximum=30, step=-1),
+    ],
+    "number",
+)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def func(slider_1, slider_2, *args):
+    return slider_1 + slider_2 * 5
+
+demo = gr.Interface(
+    func,
+    [
+        gr.Slider(minimum=1.5, maximum=250000.89, randomize=True, label="Random Big Range"),
+        gr.Slider(minimum=-1, maximum=1, randomize=True, step=0.05, label="Random only multiple of 0.05 allowed"),
+        gr.Slider(minimum=0, maximum=1, randomize=True, step=0.25, label="Random only multiples of 0.25 allowed"),
+        gr.Slider(minimum=-100, maximum=100, randomize=True, step=3, label="Random between -100 and 100 step 3"),
+        gr.Slider(minimum=-100, maximum=100, randomize=True, label="Random between -100 and 100"),
+        gr.Slider(value=0.25, minimum=5, maximum=30, step=-1),
+    ],
+    "number",
+)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ 
+import gradio as gr
+
+def func(slider_1, slider_2):
+    return slider_1 * 5 + slider_2
+
+with gr.Blocks() as demo:
+    slider = gr.Slider(minimum=-10.2, maximum=15, label="Random Slider (Static)", randomize=True)
+    slider_1 = gr.Slider(minimum=100, maximum=200, label="Random Slider (Input 1)", randomize=True)
+    slider_2 = gr.Slider(minimum=10, maximum=23.2, label="Random Slider (Input 2)", randomize=True)
+    slider_3 = gr.Slider(value=3, label="Non random slider")
+    btn = gr.Button("Run")
+    btn.click(func, inputs=[slider_1, slider_2], outputs=gr.Number())
+
+if __name__ == "__main__":
+    demo.launch()
+ 
+import gradio as gr
+
+def func(slider_1, slider_2):
+    return slider_1 * 5 + slider_2
+
+with gr.Blocks() as demo:
+    slider = gr.Slider(minimum=-10.2, maximum=15, label="Random Slider (Static)", randomize=True)
+    slider_1 = gr.Slider(minimum=100, maximum=200, label="Random Slider (Input 1)", randomize=True)
+    slider_2 = gr.Slider(minimum=10, maximum=23.2, label="Random Slider (Input 2)", randomize=True)
+    slider_3 = gr.Slider(value=3, label="Non random slider")
+    btn = gr.Button("Run")
+    btn.click(func, inputs=[slider_1, slider_2], outputs=gr.Number())
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Slider
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Slider.change(fn, ···)  Triggered when the value of the Slider changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Slider.input(fn, ···)  This listener is triggered when the user changes the value of the Slider. Slider.release(fn, ···)  This listener is triggered when the user releases the mouse on this Slider.  Event Parameters Parameters ▼    Guides Create Your Own Friends With A Gan   ← SimpleImage State →     Status  
+
+
+
+

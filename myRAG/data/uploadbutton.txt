@@ -1,0 +1,122 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  UploadButton    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Timer Video →  UploadButton gradio.UploadButton(···) import gradio as gr
+def upload_file(files):
+    file_paths = [file.name for file in files]
+    return file_paths
+with gr.Blocks() as demo:
+    file_output = gr.File()
+    upload_button = gr.UploadButton("Click to Upload an Image or Video File", file_types=["image", "video"], file_count="multiple")
+    upload_button.upload(upload_file, upload_button, file_output)
+demo.launch() Description Used to create an upload button, when clicked allows a user to upload files that satisfy the specified file type or generic files (if file_type not set).  Behavior As input component: Passes the file as a str or bytes object, or a list of str or list of bytes objects, depending on type and file_count. Your function should accept one of these types: def predict(
+	value: bytes | str | list[bytes] | list[str] | None
+)
+	...  As output component: Expects a str filepath or URL, or a list[str] of filepaths/URLs. Your function should return one of these types: def predict(···) -> str | list[str] | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.UploadButton  "uploadbutton" Uses default values  Demos upload_and_downloadupload_button  Open in 🎢 ↗ from pathlib import Path
+import gradio as gr
+
+def upload_file(filepath):
+    name = Path(filepath).name
+    return [gr.UploadButton(visible=False), gr.DownloadButton(label=f"Download {name}", value=filepath, visible=True)]
+
+def download_file():
+    return [gr.UploadButton(visible=True), gr.DownloadButton(visible=False)]
+
+with gr.Blocks() as demo:
+    gr.Markdown("First upload a file and and then you'll be able download it (but only once!)")
+    with gr.Row():
+        u = gr.UploadButton("Upload a file", file_count="single")
+        d = gr.DownloadButton("Download the file", visible=False)
+
+    u.upload(upload_file, u, [u, d])
+    d.click(download_file, None, [u, d])
+
+if __name__ == "__main__":
+    demo.launch()
+ from pathlib import Path
+import gradio as gr
+
+def upload_file(filepath):
+    name = Path(filepath).name
+    return [gr.UploadButton(visible=False), gr.DownloadButton(label=f"Download {name}", value=filepath, visible=True)]
+
+def download_file():
+    return [gr.UploadButton(visible=True), gr.DownloadButton(visible=False)]
+
+with gr.Blocks() as demo:
+    gr.Markdown("First upload a file and and then you'll be able download it (but only once!)")
+    with gr.Row():
+        u = gr.UploadButton("Upload a file", file_count="single")
+        d = gr.DownloadButton("Download the file", visible=False)
+
+    u.upload(upload_file, u, [u, d])
+    d.click(download_file, None, [u, d])
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+
+def upload_file(files):
+    file_paths = [file.name for file in files]
+    return file_paths
+
+with gr.Blocks() as demo:
+    file_output = gr.File()
+    upload_button = gr.UploadButton("Click to Upload a File", file_types=["image", "video"], file_count="multiple")
+    upload_button.upload(upload_file, upload_button, file_output)
+
+demo.launch()
+ import gradio as gr
+
+def upload_file(files):
+    file_paths = [file.name for file in files]
+    return file_paths
+
+with gr.Blocks() as demo:
+    file_output = gr.File()
+    upload_button = gr.UploadButton("Click to Upload a File", file_types=["image", "video"], file_count="multiple")
+    upload_button.upload(upload_file, upload_button, file_output)
+
+demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The UploadButton
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description UploadButton.click(fn, ···)  Triggered when the UploadButton is clicked. UploadButton.upload(fn, ···)  This listener is triggered when the user uploads a file into the UploadButton.  Event Parameters Parameters ▼     ← Timer Video →     Status  
+
+
+
+

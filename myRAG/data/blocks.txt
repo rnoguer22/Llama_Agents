@@ -1,0 +1,260 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Building Demos  Blocks    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← TabbedInterface render →  Blocks with gradio.Blocks(): Description Blocks is Gradio's low-level API that allows you to create more custom web applications and demos than Interfaces (yet still entirely in Python).   Compared to the Interface class, Blocks offers more flexibility and control over: (1) the layout of components (2) the events that trigger the execution of functions (3) data flows (e.g. inputs can trigger outputs, which can trigger the next level of outputs). Blocks also offers ways to group together related demos such as with tabs.   The basic usage of Blocks is as follows: create a Blocks object, then use it as a context (with the "with" statement), and then define layouts, components, or events within the Blocks context. Finally, call the launch() method to launch the demo.  Example Usage import gradio as gr
+def update(name):
+    return f"Welcome to Gradio, {name}!"
+
+with gr.Blocks() as demo:
+    gr.Markdown("Start typing below and then click **Run** to see the output.")
+    with gr.Row():
+        inp = gr.Textbox(placeholder="What is your name?")
+        out = gr.Textbox()
+    btn = gr.Button("Run")
+    btn.click(fn=update, inputs=inp, outputs=out)
+
+demo.launch() Initialization Parameters ▼  Demos blocks_helloblocks_flipperblocks_kinematics  Open in 🎢 ↗ import gradio as gr
+
+def welcome(name):
+    return f"Welcome to Gradio, {name}!"
+
+with gr.Blocks() as demo:
+    gr.Markdown(
+    """
+    # Hello World!
+    Start typing below to see the output.
+    """)
+    inp = gr.Textbox(placeholder="What is your name?")
+    out = gr.Textbox()
+    inp.change(welcome, inp, out)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def welcome(name):
+    return f"Welcome to Gradio, {name}!"
+
+with gr.Blocks() as demo:
+    gr.Markdown(
+    """
+    # Hello World!
+    Start typing below to see the output.
+    """)
+    inp = gr.Textbox(placeholder="What is your name?")
+    out = gr.Textbox()
+    inp.change(welcome, inp, out)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import numpy as np
+import gradio as gr
+
+def flip_text(x):
+    return x[::-1]
+
+def flip_image(x):
+    return np.fliplr(x)
+
+with gr.Blocks() as demo:
+    gr.Markdown("Flip text or image files using this demo.")
+    with gr.Tab("Flip Text"):
+        text_input = gr.Textbox()
+        text_output = gr.Textbox()
+        text_button = gr.Button("Flip")
+    with gr.Tab("Flip Image"):
+        with gr.Row():
+            image_input = gr.Image()
+            image_output = gr.Image()
+        image_button = gr.Button("Flip")
+
+    with gr.Accordion("Open for More!", open=False):
+        gr.Markdown("Look at me...")
+        temp_slider = gr.Slider(
+            0, 1,
+            value=0.1,
+            step=0.1,
+            interactive=True,
+            label="Slide me",
+        )
+
+    text_button.click(flip_text, inputs=text_input, outputs=text_output)
+    image_button.click(flip_image, inputs=image_input, outputs=image_output)
+
+if __name__ == "__main__":
+    demo.launch()
+ import numpy as np
+import gradio as gr
+
+def flip_text(x):
+    return x[::-1]
+
+def flip_image(x):
+    return np.fliplr(x)
+
+with gr.Blocks() as demo:
+    gr.Markdown("Flip text or image files using this demo.")
+    with gr.Tab("Flip Text"):
+        text_input = gr.Textbox()
+        text_output = gr.Textbox()
+        text_button = gr.Button("Flip")
+    with gr.Tab("Flip Image"):
+        with gr.Row():
+            image_input = gr.Image()
+            image_output = gr.Image()
+        image_button = gr.Button("Flip")
+
+    with gr.Accordion("Open for More!", open=False):
+        gr.Markdown("Look at me...")
+        temp_slider = gr.Slider(
+            0, 1,
+            value=0.1,
+            step=0.1,
+            interactive=True,
+            label="Slide me",
+        )
+
+    text_button.click(flip_text, inputs=text_input, outputs=text_output)
+    image_button.click(flip_image, inputs=image_input, outputs=image_output)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import pandas as pd
+import numpy as np
+
+import gradio as gr
+
+def plot(v, a):
+    g = 9.81
+    theta = a / 180 * 3.14
+    tmax = ((2 * v) * np.sin(theta)) / g
+    timemat = tmax * np.linspace(0, 1, 40)
+
+    x = (v * timemat) * np.cos(theta)
+    y = ((v * timemat) * np.sin(theta)) - ((0.5 * g) * (timemat**2))
+    df = pd.DataFrame({"x": x, "y": y})
+    return df
+
+demo = gr.Blocks()
+
+with demo:
+    gr.Markdown(
+        r"Let's do some kinematics! Choose the speed and angle to see the trajectory. Remember that the range $R = v_0^2 \cdot \frac{\sin(2\theta)}{g}$"
+    )
+
+    with gr.Row():
+        speed = gr.Slider(1, 30, 25, label="Speed")
+        angle = gr.Slider(0, 90, 45, label="Angle")
+    output = gr.LinePlot(
+        x="x",
+        y="y",
+        overlay_point=True,
+        tooltip=["x", "y"],
+        x_lim=[0, 100],
+        y_lim=[0, 60],
+        width=350,
+        height=300,
+    )
+    btn = gr.Button(value="Run")
+    btn.click(plot, [speed, angle], output)
+
+if __name__ == "__main__":
+    demo.launch()
+ import pandas as pd
+import numpy as np
+
+import gradio as gr
+
+def plot(v, a):
+    g = 9.81
+    theta = a / 180 * 3.14
+    tmax = ((2 * v) * np.sin(theta)) / g
+    timemat = tmax * np.linspace(0, 1, 40)
+
+    x = (v * timemat) * np.cos(theta)
+    y = ((v * timemat) * np.sin(theta)) - ((0.5 * g) * (timemat**2))
+    df = pd.DataFrame({"x": x, "y": y})
+    return df
+
+demo = gr.Blocks()
+
+with demo:
+    gr.Markdown(
+        r"Let's do some kinematics! Choose the speed and angle to see the trajectory. Remember that the range $R = v_0^2 \cdot \frac{\sin(2\theta)}{g}$"
+    )
+
+    with gr.Row():
+        speed = gr.Slider(1, 30, 25, label="Speed")
+        angle = gr.Slider(0, 90, 45, label="Angle")
+    output = gr.LinePlot(
+        x="x",
+        y="y",
+        overlay_point=True,
+        tooltip=["x", "y"],
+        x_lim=[0, 100],
+        y_lim=[0, 60],
+        width=350,
+        height=300,
+    )
+    btn = gr.Button(value="Run")
+    btn.click(plot, [speed, angle], output)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Methods  launch  gradio.Blocks.launch(···) Description
+		 Launches a simple web server that serves the demo. Can also be used to create a public link used by anyone to access the demo from their browser by setting share=True. <br> Example Usage
+			 import gradio as gr
+def reverse(text):
+    return text[::-1]
+with gr.Blocks() as demo:
+    button = gr.Button(value="Reverse")
+    button.click(reverse, gr.Textbox(), gr.Textbox())
+demo.launch(share=True, auth=("username", "password")) Parameters ▼  queue  gradio.Blocks.queue(···) Description
+		 By enabling the queue you can control when users know their position in the queue, and set a limit on maximum number of events allowed. Example Usage
+			 with gr.Blocks() as demo:
+    button = gr.Button(label="Generate Image")
+    button.click(fn=image_generator, inputs=gr.Textbox(), outputs=gr.Image())
+demo.queue(max_size=10)
+demo.launch() Parameters ▼  integrate  gradio.Blocks.integrate(···) Description
+		 A catch-all method for integrating with other libraries. This method should be run after launch() Parameters ▼  load  gradio.Blocks.load(block, ···) Description
+		 This listener is triggered when the Blocks initially loads in the browser. Parameters ▼  unload  gradio.Blocks.unload(fn, ···) Description
+		 This listener is triggered when the user closes or refreshes the tab, ending the user session. It is useful for cleaning up resources when the app is closed. Example Usage
+			 import gradio as gr
+with gr.Blocks() as demo:
+    gr.Markdown("# When you close the tab, hello will be printed to the console")
+    demo.unload(lambda: print("hello"))
+demo.launch() Parameters ▼   Guides Blocks And Event Listeners  Controlling Layout  State In Blocks  Custom CSS And JS  Using Blocks Like Functions   ← TabbedInterface render →     Status  
+
+
+
+

@@ -1,0 +1,135 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  HighlightedText    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Gallery HTML →  HighlightedText gradio.HighlightedText(···) import gradio as gr
+with gr.Blocks() as demo:
+    gr.HighlightedText(
+        value=[
+            ("The ", "article"), 
+            ("quick ", "adjective"),
+            ("brown ", "adjective"), 
+            ("fox ", "noun"),
+            ("jumps ", "verb"), 
+            ("over ", "preposition"),
+            ("the ", "article"), 
+            ("lazy ", "adjective"),
+            ("dog", "noun"),
+        ],
+        combine_adjacent=True,
+    )
+demo.launch() Description Displays text that contains spans that are highlighted by category or numerical value.  Behavior As input component: Passes the value as a list of tuples as a list[tuple] into the function. Each tuple consists of a str substring of the text (so the entire text is included) and str | float | None label, which is the category or confidence of that substring. Your function should accept one of these types: def predict(
+	value: list[tuple[str, str | float | None]] | None
+)
+	...  As output component: Expects a list of (word, category) tuples, or a dictionary of two keys: "text", and "entities", which itself is a list of dictionaries, each of which have the keys: "entity" (or "entity_group"), "start", and "end" Your function should return one of these types: def predict(···) -> list[tuple[str, str | float | None]] | dict | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.HighlightedText  "highlightedtext" Uses default values  Demos diff_texts  Open in 🎢 ↗ from difflib import Differ
+
+import gradio as gr
+
+def diff_texts(text1, text2):
+    d = Differ()
+    return [
+        (token[2:], token[0] if token[0] != " " else None)
+        for token in d.compare(text1, text2)
+    ]
+
+demo = gr.Interface(
+    diff_texts,
+    [
+        gr.Textbox(
+            label="Text 1",
+            info="Initial text",
+            lines=3,
+            value="The quick brown fox jumped over the lazy dogs.",
+        ),
+        gr.Textbox(
+            label="Text 2",
+            info="Text to compare",
+            lines=3,
+            value="The fast brown fox jumps over lazy dogs.",
+        ),
+    ],
+    gr.HighlightedText(
+        label="Diff",
+        combine_adjacent=True,
+        show_legend=True,
+        color_map={"+": "red", "-": "green"}),
+    theme=gr.themes.Base()
+)
+if __name__ == "__main__":
+    demo.launch()
+ from difflib import Differ
+
+import gradio as gr
+
+def diff_texts(text1, text2):
+    d = Differ()
+    return [
+        (token[2:], token[0] if token[0] != " " else None)
+        for token in d.compare(text1, text2)
+    ]
+
+demo = gr.Interface(
+    diff_texts,
+    [
+        gr.Textbox(
+            label="Text 1",
+            info="Initial text",
+            lines=3,
+            value="The quick brown fox jumped over the lazy dogs.",
+        ),
+        gr.Textbox(
+            label="Text 2",
+            info="Text to compare",
+            lines=3,
+            value="The fast brown fox jumps over lazy dogs.",
+        ),
+    ],
+    gr.HighlightedText(
+        label="Diff",
+        combine_adjacent=True,
+        show_legend=True,
+        color_map={"+": "red", "-": "green"}),
+    theme=gr.themes.Base()
+)
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The HighlightedText
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description HighlightedText.change(fn, ···)  Triggered when the value of the HighlightedText changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. HighlightedText.select(fn, ···)  Event listener for when the user selects or deselects the HighlightedText. Uses event data gradio.SelectData to carry value referring to the label of the HighlightedText, and selected to refer to state of the HighlightedText. See EventData documentation on how to use this event data  Event Parameters Parameters ▼    Guides Named Entity Recognition   ← Gallery HTML →     Status  
+
+
+
+

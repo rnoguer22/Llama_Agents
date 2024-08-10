@@ -1,0 +1,110 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  ScatterPlot    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Radio SimpleImage →  ScatterPlot gradio.ScatterPlot(···) import gradio as gr
+import pandas as pd
+import numpy as np
+simple = pd.DataFrame(np.array(
+    [
+        [1, 23, "USA", "Ford Mustang"],
+        [2, 40, "USA", "Chrysler New Yorker Brougham"],
+        [3, 32, "Japan", "Toyota Corolla"],
+        [4, 32, "Europe", "Mercedes Benz"],
+        [5, 15, "USA", "AMC Matador"],
+        [6, 35, "Europe", "BMW X5"],
+        [7, 28, "Japan", "Honda Civic"],
+        [8, 15, "Japan", "Honda Accord"],
+        [9, 41, "Europe", "Peugeot 208"],
+    ]
+), columns=["Age", "Miles Per Gallon", "Origin of Car", "Name"])
+with gr.Blocks() as demo:
+    gr.ScatterPlot(
+        value=simple,
+        x="Age",
+        y="Miles Per Gallon",
+        title="Car Data",
+        container=True,
+        width=400,
+        color="Origin of Car",
+        tooltip="Name"
+    )
+demo.launch()
+pandas
+numpy Description Creates a scatter plot component to display data from a pandas DataFrame.  Behavior As input component: The data to display in a line plot. Your function should accept one of these types: def predict(
+	value: AltairPlotData | None
+)
+	...  As output component: Expects a pandas DataFrame containing the data to display in the line plot. The DataFrame should contain at least two columns, one for the x-axis (corresponding to this component's x argument) and one for the y-axis (corresponding to y). Your function should return one of these types: def predict(···) -> pd.DataFrame | dict | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.ScatterPlot  "scatterplot" Uses default values  Demos native_plots  Open in 🎢 ↗ import gradio as gr
+
+from scatter_plot_demo import scatter_plots
+from line_plot_demo import line_plots
+from bar_plot_demo import bar_plots
+
+with gr.Blocks() as demo:
+    with gr.Tabs():
+        with gr.TabItem("Line Plot"):
+            line_plots.render()
+        with gr.TabItem("Scatter Plot"):
+            scatter_plots.render()
+        with gr.TabItem("Bar Plot"):
+            bar_plots.render()
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+from scatter_plot_demo import scatter_plots
+from line_plot_demo import line_plots
+from bar_plot_demo import bar_plots
+
+with gr.Blocks() as demo:
+    with gr.Tabs():
+        with gr.TabItem("Line Plot"):
+            line_plots.render()
+        with gr.TabItem("Scatter Plot"):
+            scatter_plots.render()
+        with gr.TabItem("Bar Plot"):
+            bar_plots.render()
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The ScatterPlot
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description ScatterPlot.select(fn, ···)  Event listener for when the user selects or deselects the NativePlot. Uses event data gradio.SelectData to carry value referring to the label of the NativePlot, and selected to refer to state of the NativePlot. See EventData documentation on how to use this event data ScatterPlot.double_click(fn, ···)  Triggered when the NativePlot is double clicked.  Event Parameters Parameters ▼     ← Radio SimpleImage →     Status  
+
+
+
+

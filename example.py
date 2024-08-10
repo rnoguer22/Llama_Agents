@@ -31,7 +31,6 @@ vectorstore = SKLearnVectorStore.from_documents(
     # embedding=OpenAIEmbeddings(),
 )
 retriever = vectorstore.as_retriever(k=4)
-print('\n'*3, retriever, '\n'*3)
 
 
 
@@ -265,7 +264,7 @@ workflow.add_edge("generate", END)
 
 custom_graph = workflow.compile()
 
-display(Image(custom_graph.get_graph(xray=True).draw_mermaid_png()))
+#display(Image(custom_graph.get_graph(xray=True).draw_mermaid_png()))
 
 
 
@@ -283,6 +282,6 @@ def predict_custom_agent_answer(example: dict):
     
     return {"response": state_dict["generation"], "steps": state_dict["steps"]}
 
-example = {"input": "What are the types of agent memory?"}
+example = {"input": "How can I cook a sausage?"}
 response = predict_custom_agent_answer(example)
-print(response)
+print(response['response'])

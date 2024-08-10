@@ -1,0 +1,81 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Helpers  KeyUpData    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← DeletedFileData LikeData →  KeyUpData gradio.KeyUpData(···) Description The gr.KeyUpData class is a subclass of gr.EventData that specifically carries information about the .key_up() event. When gr.KeyUpData is added as a type hint to an argument of an event listener method, a gr.KeyUpData object will automatically be passed as the value of that argument. The attributes of this object contains information about the event that triggered the listener.  Example Usage import gradio as gr
+
+def test(value, key_up_data: gr.KeyUpData):
+    return {
+        "component value": value,
+        "input value": key_up_data.input_value,
+        "key": key_up_data.key
+    }
+
+with gr.Blocks() as demo:
+    d = gr.Dropdown(["abc", "def"], allow_custom_value=True)
+    t = gr.JSON()
+    d.key_up(test, d, t)
+demo.launch() Attributes Parameters ▼  Demos dropdown_key_up  Open in 🎢 ↗ import gradio as gr
+
+def test(value, key_up_data: gr.KeyUpData):
+    return {
+        "component value": value,
+        "input value": key_up_data.input_value,
+        "key": key_up_data.key
+    }
+
+with gr.Blocks() as demo:
+    d = gr.Dropdown(["abc", "def"], allow_custom_value=True)
+    t = gr.JSON()
+    d.key_up(test, d, t)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def test(value, key_up_data: gr.KeyUpData):
+    return {
+        "component value": value,
+        "input value": key_up_data.input_value,
+        "key": key_up_data.key
+    }
+
+with gr.Blocks() as demo:
+    d = gr.Dropdown(["abc", "def"], allow_custom_value=True)
+    t = gr.JSON()
+    d.key_up(test, d, t)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		     ← DeletedFileData LikeData →     Status  
+
+
+
+

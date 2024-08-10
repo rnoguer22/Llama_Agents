@@ -1,0 +1,119 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Gallery    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← FileExplorer HighlightedText →  Gallery gradio.Gallery(···) import gradio as gr 
+with gr.Blocks() as demo:
+    cheetahs = [
+        "https://upload.wikimedia.org/wikipedia/commons/0/09/TheCheethcat.jpg",
+        "https://nationalzoo.si.edu/sites/default/files/animals/cheetah-003.jpg",
+        "https://img.etimg.com/thumb/msid-50159822,width-650,imgsize-129520,,resizemode-4,quality-100/.jpg",
+        "https://nationalzoo.si.edu/sites/default/files/animals/cheetah-002.jpg",
+        "https://images.theconversation.com/files/375893/original/file-20201218-13-a8h8uq.jpg?ixlib=rb-1.1.0&rect=16%2C407%2C5515%2C2924&q=45&auto=format&w=496&fit=clip",
+    ]
+    gr.Gallery(value=cheetahs, columns=4)
+demo.launch() Description Creates a gallery component that allows displaying a grid of images, and optionally captions. If used as an input, the user can upload images to the gallery. If used as an output, the user can click on individual images to view them at a higher resolution.  Behavior As input component: Passes the list of images as a list of (image, caption) tuples, or a list of (image, None) tuples if no captions are provided (which is usually the case). The image can be a str file path, a numpy array, or a PIL.Image object depending on type. Your function should accept one of these types: def predict(
+	value: List[tuple[str, str | None]] | List[tuple[PIL.Image.Image, str | None]] | List[tuple[np.ndarray, str | None]] | None
+)
+	...  As output component: Expects the function to return a list of images, or list of (image, str caption) tuples. Each image can be a str file path, a numpy array, or a PIL.Image object. Your function should return one of these types: def predict(···) -> list[GalleryImageType | CaptionedGalleryImageType] | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Gallery  "gallery" Uses default values  Demos fake_gan  Open in 🎢 ↗ # This demo needs to be run from the repo folder.
+# python demo/fake_gan/run.py
+import random
+
+import gradio as gr
+
+def fake_gan():
+    images = [
+        (random.choice(
+            [
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-1151ce9f4b2043de0d2e3b7826127998.jpg",
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-116b5e92936b766b7fdfc242649337f7.jpg",
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-1163530ca19b5cebe1b002b8ec67b6fc.jpg",
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-1116395d6e6a6581eef8b8038f4c8e55.jpg",
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-11319be65db395d0e8e6855d18ddcef0.jpg",
+            ]
+        ), f"label {i}")
+        for i in range(3)
+    ]
+    return images
+
+with gr.Blocks() as demo:
+    gallery = gr.Gallery(
+        label="Generated images", show_label=False, elem_id="gallery"
+    , columns=[3], rows=[1], object_fit="contain", height="auto")
+    btn = gr.Button("Generate images", scale=0)
+
+    btn.click(fake_gan, None, gallery)
+
+if __name__ == "__main__":
+    demo.launch()
+ # This demo needs to be run from the repo folder.
+# python demo/fake_gan/run.py
+import random
+
+import gradio as gr
+
+def fake_gan():
+    images = [
+        (random.choice(
+            [
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-1151ce9f4b2043de0d2e3b7826127998.jpg",
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-116b5e92936b766b7fdfc242649337f7.jpg",
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-1163530ca19b5cebe1b002b8ec67b6fc.jpg",
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-1116395d6e6a6581eef8b8038f4c8e55.jpg",
+                "http://www.marketingtool.online/en/face-generator/img/faces/avatar-11319be65db395d0e8e6855d18ddcef0.jpg",
+            ]
+        ), f"label {i}")
+        for i in range(3)
+    ]
+    return images
+
+with gr.Blocks() as demo:
+    gallery = gr.Gallery(
+        label="Generated images", show_label=False, elem_id="gallery"
+    , columns=[3], rows=[1], object_fit="contain", height="auto")
+    btn = gr.Button("Generate images", scale=0)
+
+    btn.click(fake_gan, None, gallery)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Gallery
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Gallery.select(fn, ···)  Event listener for when the user selects or deselects the Gallery. Uses event data gradio.SelectData to carry value referring to the label of the Gallery, and selected to refer to state of the Gallery. See EventData documentation on how to use this event data Gallery.upload(fn, ···)  This listener is triggered when the user uploads a file into the Gallery. Gallery.change(fn, ···)  Triggered when the value of the Gallery changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input.  Event Parameters Parameters ▼     ← FileExplorer HighlightedText →     Status  
+
+
+
+

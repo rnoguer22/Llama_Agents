@@ -1,0 +1,55 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Code    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← ClearButton ColorPicker →  Code gradio.Code(···) import gradio as gr
+with gr.Blocks() as demo: 
+    gr.Code(language="python", value="""
+import gradio as gr
+def hello(name): 
+    return "hello " + name
+interface = gr.Interface(hello, "text", "text")
+interface.launch()
+    """, interactive=True, lines=6)
+demo.launch() Description Creates a code editor for viewing code (as an output component), or for entering and editing code (as an input component). Behavior As input component: Passes the code entered as a str. Your function should accept one of these types: def predict(
+	value: str | None
+)
+	...  As output component: Expects a str of code or a single-element tuple: (filepath,) with the str path to a file containing the code. Your function should return one of these types: def predict(···) -> tuple[str] | str | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Code  "code" Uses default values  Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Code
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Code.languages(fn, ···)  ['python', 'c', 'cpp', 'markdown', 'json', 'html', 'css', 'javascript', 'typescript', 'yaml', 'dockerfile', 'shell', 'r', 'sql', 'sql-msSQL', 'sql-mySQL', 'sql-mariaDB', 'sql-sqlite', 'sql-cassandra', 'sql-plSQL', 'sql-hive', 'sql-pgSQL', 'sql-gql', 'sql-gpSQL', 'sql-sparkSQL', 'sql-esper', None] Code.change(fn, ···)  Triggered when the value of the Code changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Code.input(fn, ···)  This listener is triggered when the user changes the value of the Code. Code.focus(fn, ···)  This listener is triggered when the Code is focused. Code.blur(fn, ···)  This listener is triggered when the Code is unfocused/blurred.  Event Parameters Parameters ▼     ← ClearButton ColorPicker →     Status  
+
+
+
+

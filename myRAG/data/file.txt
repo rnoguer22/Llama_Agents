@@ -1,0 +1,49 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  File    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← DuplicateButton FileExplorer →  File gradio.File(···) import gradio as gr 
+with gr.Blocks() as demo:
+    gr.File()
+demo.launch() Description Creates a file component that allows uploading one or more generic files (when used as an input) or displaying generic files or URLs for download (as output).  Behavior As input component: Passes the file as a str or bytes object, or a list of str or list of bytes objects, depending on type and file_count. Your function should accept one of these types: def predict(
+	value: bytes | str | list[bytes] | list[str] | None
+)
+	...  As output component: Expects a str filepath or URL, or a list[str] of filepaths/URLs. Your function should return one of these types: def predict(···) -> str | list[str] | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.File  "file" Uses default values gradio.Files  "files" Uses file_count="multiple"  Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The File
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description File.change(fn, ···)  Triggered when the value of the File changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. File.select(fn, ···)  Event listener for when the user selects or deselects the File. Uses event data gradio.SelectData to carry value referring to the label of the File, and selected to refer to state of the File. See EventData documentation on how to use this event data File.clear(fn, ···)  This listener is triggered when the user clears the File using the X button for the component. File.upload(fn, ···)  This listener is triggered when the user uploads a file into the File. File.delete(fn, ···)  This listener is triggered when the user deletes and item from the File. Uses event data gradio.DeletedFileData to carry value referring to the file that was deleted as an instance of FileData. See EventData documentation on how to use this event data  Event Parameters Parameters ▼     ← DuplicateButton FileExplorer →     Status  
+
+
+
+

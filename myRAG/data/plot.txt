@@ -1,0 +1,213 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Plot    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← ParamViewer Radio →  Plot gradio.Plot(···) import gradio as gr 
+import matplotlib.pyplot as plt
+import numpy as np
+Fs = 8000
+f = 5
+sample = 8000
+x = np.arange(sample)
+y = np.sin(2 * np.pi * f * x / Fs)
+plt.plot(x, y)
+with gr.Blocks() as demo:
+    gr.Plot(value=plt, format="png")
+demo.launch()
+matplotlib
+numpy Description Creates a plot component to display various kinds of plots (matplotlib, plotly, altair, or bokeh plots are supported). As this component does not accept user input, it is rarely used as an input component.  Behavior As input component: (Rarely used) passes the data displayed in the plot as an PlotData dataclass, which includes the plot information as a JSON string, as well as the type of chart and the plotting library. Your function should accept one of these types: def predict(
+	value: PlotData | None
+)
+	...  As output component: Expects plot data in one of these formats: a matplotlib.Figure, bokeh.Model, plotly.Figure, or altair.Chart object. Your function should return one of these types: def predict(···) -> Any
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Plot  "plot" Uses default values  Demos blocks_kinematicsstock_forecast  Open in 🎢 ↗ import pandas as pd
+import numpy as np
+
+import gradio as gr
+
+def plot(v, a):
+    g = 9.81
+    theta = a / 180 * 3.14
+    tmax = ((2 * v) * np.sin(theta)) / g
+    timemat = tmax * np.linspace(0, 1, 40)
+
+    x = (v * timemat) * np.cos(theta)
+    y = ((v * timemat) * np.sin(theta)) - ((0.5 * g) * (timemat**2))
+    df = pd.DataFrame({"x": x, "y": y})
+    return df
+
+demo = gr.Blocks()
+
+with demo:
+    gr.Markdown(
+        r"Let's do some kinematics! Choose the speed and angle to see the trajectory. Remember that the range $R = v_0^2 \cdot \frac{\sin(2\theta)}{g}$"
+    )
+
+    with gr.Row():
+        speed = gr.Slider(1, 30, 25, label="Speed")
+        angle = gr.Slider(0, 90, 45, label="Angle")
+    output = gr.LinePlot(
+        x="x",
+        y="y",
+        overlay_point=True,
+        tooltip=["x", "y"],
+        x_lim=[0, 100],
+        y_lim=[0, 60],
+        width=350,
+        height=300,
+    )
+    btn = gr.Button(value="Run")
+    btn.click(plot, [speed, angle], output)
+
+if __name__ == "__main__":
+    demo.launch()
+ import pandas as pd
+import numpy as np
+
+import gradio as gr
+
+def plot(v, a):
+    g = 9.81
+    theta = a / 180 * 3.14
+    tmax = ((2 * v) * np.sin(theta)) / g
+    timemat = tmax * np.linspace(0, 1, 40)
+
+    x = (v * timemat) * np.cos(theta)
+    y = ((v * timemat) * np.sin(theta)) - ((0.5 * g) * (timemat**2))
+    df = pd.DataFrame({"x": x, "y": y})
+    return df
+
+demo = gr.Blocks()
+
+with demo:
+    gr.Markdown(
+        r"Let's do some kinematics! Choose the speed and angle to see the trajectory. Remember that the range $R = v_0^2 \cdot \frac{\sin(2\theta)}{g}$"
+    )
+
+    with gr.Row():
+        speed = gr.Slider(1, 30, 25, label="Speed")
+        angle = gr.Slider(0, 90, 45, label="Angle")
+    output = gr.LinePlot(
+        x="x",
+        y="y",
+        overlay_point=True,
+        tooltip=["x", "y"],
+        x_lim=[0, 100],
+        y_lim=[0, 60],
+        width=350,
+        height=300,
+    )
+    btn = gr.Button(value="Run")
+    btn.click(plot, [speed, angle], output)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import matplotlib.pyplot as plt
+import numpy as np
+
+import gradio as gr
+
+def plot_forecast(final_year, companies, noise, show_legend, point_style):
+    start_year = 2020
+    x = np.arange(start_year, final_year + 1)
+    year_count = x.shape[0]
+    plt_format = ({"cross": "X", "line": "-", "circle": "o--"})[point_style]
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    for i, company in enumerate(companies):
+        series = np.arange(0, year_count, dtype=float)
+        series = series**2 * (i + 1)
+        series += np.random.rand(year_count) * noise
+        ax.plot(x, series, plt_format)
+    if show_legend:
+        plt.legend(companies)
+    return fig
+
+demo = gr.Interface(
+    plot_forecast,
+    [
+        gr.Radio([2025, 2030, 2035, 2040], label="Project to:"),
+        gr.CheckboxGroup(["Google", "Microsoft", "Gradio"], label="Company Selection"),
+        gr.Slider(1, 100, label="Noise Level"),
+        gr.Checkbox(label="Show Legend"),
+        gr.Dropdown(["cross", "line", "circle"], label="Style"),
+    ],
+    gr.Plot(label="forecast", format="png"),
+)
+
+if __name__ == "__main__":
+    demo.launch()
+ import matplotlib.pyplot as plt
+import numpy as np
+
+import gradio as gr
+
+def plot_forecast(final_year, companies, noise, show_legend, point_style):
+    start_year = 2020
+    x = np.arange(start_year, final_year + 1)
+    year_count = x.shape[0]
+    plt_format = ({"cross": "X", "line": "-", "circle": "o--"})[point_style]
+    fig = plt.figure()
+    ax = fig.add_subplot(111)
+    for i, company in enumerate(companies):
+        series = np.arange(0, year_count, dtype=float)
+        series = series**2 * (i + 1)
+        series += np.random.rand(year_count) * noise
+        ax.plot(x, series, plt_format)
+    if show_legend:
+        plt.legend(companies)
+    return fig
+
+demo = gr.Interface(
+    plot_forecast,
+    [
+        gr.Radio([2025, 2030, 2035, 2040], label="Project to:"),
+        gr.CheckboxGroup(["Google", "Microsoft", "Gradio"], label="Company Selection"),
+        gr.Slider(1, 100, label="Noise Level"),
+        gr.Checkbox(label="Show Legend"),
+        gr.Dropdown(["cross", "line", "circle"], label="Style"),
+    ],
+    gr.Plot(label="forecast", format="png"),
+)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Plot
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Plot.change(fn, ···)  Triggered when the value of the Plot changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Plot.clear(fn, ···)  This listener is triggered when the user clears the Plot using the X button for the component.  Event Parameters Parameters ▼    Guides Plot Component For Maps   ← ParamViewer Radio →     Status  
+
+
+
+

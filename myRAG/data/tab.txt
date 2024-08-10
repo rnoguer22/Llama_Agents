@@ -1,0 +1,42 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Blocks Layout  Tab    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Row Introduction →  Tab gradio.Tab(···) Description Tab (or its alias TabItem) is a layout element. Components defined within the Tab will be visible when this tab is selected tab. Example Usage with gr.Blocks() as demo:
+    with gr.Tab("Lion"):
+        gr.Image("lion.jpg")
+        gr.Button("New Lion")
+    with gr.Tab("Tiger"):
+        gr.Image("tiger.jpg")
+        gr.Button("New Tiger") Initialization Parameters ▼  Methods  select  gradio.Tab.select(···) Description
+		 Event listener for when the user selects or deselects the Tab. Uses event data gradio.SelectData to carry `value` referring to the label of the Tab, and `selected` to refer to state of the Tab. See EventData documentation on how to use this event data Parameters ▼   Guides Controlling Layout   ← Row Introduction →     Status  
+
+
+
+

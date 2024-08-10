@@ -1,0 +1,202 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Textbox    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← State Timer →  Textbox gradio.Textbox(···) import gradio as gr 
+with gr.Blocks() as demo:
+    gr.Textbox()
+demo.launch() Description Creates a textarea for user to enter string input or display string output.  Behavior As input component: Passes text value as a str into the function. Your function should accept one of these types: def predict(
+	value: str | None
+)
+	...  As output component: Expects a str returned from function and sets textarea value to it. Your function should return one of these types: def predict(···) -> str | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Textbox  "textbox" Uses default values gradio.TextArea  "textarea" Uses lines=7  Demos hello_worlddiff_textssentence_builder  Open in 🎢 ↗ import gradio as gr
+
+def greet(name):
+    return "Hello " + name + "!"
+
+demo = gr.Interface(fn=greet, inputs="textbox", outputs="textbox")
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def greet(name):
+    return "Hello " + name + "!"
+
+demo = gr.Interface(fn=greet, inputs="textbox", outputs="textbox")
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ from difflib import Differ
+
+import gradio as gr
+
+def diff_texts(text1, text2):
+    d = Differ()
+    return [
+        (token[2:], token[0] if token[0] != " " else None)
+        for token in d.compare(text1, text2)
+    ]
+
+demo = gr.Interface(
+    diff_texts,
+    [
+        gr.Textbox(
+            label="Text 1",
+            info="Initial text",
+            lines=3,
+            value="The quick brown fox jumped over the lazy dogs.",
+        ),
+        gr.Textbox(
+            label="Text 2",
+            info="Text to compare",
+            lines=3,
+            value="The fast brown fox jumps over lazy dogs.",
+        ),
+    ],
+    gr.HighlightedText(
+        label="Diff",
+        combine_adjacent=True,
+        show_legend=True,
+        color_map={"+": "red", "-": "green"}),
+    theme=gr.themes.Base()
+)
+if __name__ == "__main__":
+    demo.launch()
+ from difflib import Differ
+
+import gradio as gr
+
+def diff_texts(text1, text2):
+    d = Differ()
+    return [
+        (token[2:], token[0] if token[0] != " " else None)
+        for token in d.compare(text1, text2)
+    ]
+
+demo = gr.Interface(
+    diff_texts,
+    [
+        gr.Textbox(
+            label="Text 1",
+            info="Initial text",
+            lines=3,
+            value="The quick brown fox jumped over the lazy dogs.",
+        ),
+        gr.Textbox(
+            label="Text 2",
+            info="Text to compare",
+            lines=3,
+            value="The fast brown fox jumps over lazy dogs.",
+        ),
+    ],
+    gr.HighlightedText(
+        label="Diff",
+        combine_adjacent=True,
+        show_legend=True,
+        color_map={"+": "red", "-": "green"}),
+    theme=gr.themes.Base()
+)
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+
+def sentence_builder(quantity, animal, countries, place, activity_list, morning):
+    return f"""The {quantity} {animal}s from {" and ".join(countries)} went to the {place} where they {" and ".join(activity_list)} until the {"morning" if morning else "night"}"""
+
+demo = gr.Interface(
+    sentence_builder,
+    [
+        gr.Slider(2, 20, value=4, label="Count", info="Choose between 2 and 20"),
+        gr.Dropdown(
+            ["cat", "dog", "bird"], label="Animal", info="Will add more animals later!"
+        ),
+        gr.CheckboxGroup(["USA", "Japan", "Pakistan"], label="Countries", info="Where are they from?"),
+        gr.Radio(["park", "zoo", "road"], label="Location", info="Where did they go?"),
+        gr.Dropdown(
+            ["ran", "swam", "ate", "slept"], value=["swam", "slept"], multiselect=True, label="Activity", info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, nisl eget ultricies aliquam, nunc nisl aliquet nunc, eget aliquam nisl nunc vel nisl."
+        ),
+        gr.Checkbox(label="Morning", info="Did they do it in the morning?"),
+    ],
+    "text",
+    examples=[
+        [2, "cat", ["Japan", "Pakistan"], "park", ["ate", "swam"], True],
+        [4, "dog", ["Japan"], "zoo", ["ate", "swam"], False],
+        [10, "bird", ["USA", "Pakistan"], "road", ["ran"], False],
+        [8, "cat", ["Pakistan"], "zoo", ["ate"], True],
+    ]
+)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def sentence_builder(quantity, animal, countries, place, activity_list, morning):
+    return f"""The {quantity} {animal}s from {" and ".join(countries)} went to the {place} where they {" and ".join(activity_list)} until the {"morning" if morning else "night"}"""
+
+demo = gr.Interface(
+    sentence_builder,
+    [
+        gr.Slider(2, 20, value=4, label="Count", info="Choose between 2 and 20"),
+        gr.Dropdown(
+            ["cat", "dog", "bird"], label="Animal", info="Will add more animals later!"
+        ),
+        gr.CheckboxGroup(["USA", "Japan", "Pakistan"], label="Countries", info="Where are they from?"),
+        gr.Radio(["park", "zoo", "road"], label="Location", info="Where did they go?"),
+        gr.Dropdown(
+            ["ran", "swam", "ate", "slept"], value=["swam", "slept"], multiselect=True, label="Activity", info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, nisl eget ultricies aliquam, nunc nisl aliquet nunc, eget aliquam nisl nunc vel nisl."
+        ),
+        gr.Checkbox(label="Morning", info="Did they do it in the morning?"),
+    ],
+    "text",
+    examples=[
+        [2, "cat", ["Japan", "Pakistan"], "park", ["ate", "swam"], True],
+        [4, "dog", ["Japan"], "zoo", ["ate", "swam"], False],
+        [10, "bird", ["USA", "Pakistan"], "road", ["ran"], False],
+        [8, "cat", ["Pakistan"], "zoo", ["ate"], True],
+    ]
+)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Textbox
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Textbox.change(fn, ···)  Triggered when the value of the Textbox changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Textbox.input(fn, ···)  This listener is triggered when the user changes the value of the Textbox. Textbox.select(fn, ···)  Event listener for when the user selects or deselects the Textbox. Uses event data gradio.SelectData to carry value referring to the label of the Textbox, and selected to refer to state of the Textbox. See EventData documentation on how to use this event data Textbox.submit(fn, ···)  This listener is triggered when the user presses the Enter key while the Textbox is focused. Textbox.focus(fn, ···)  This listener is triggered when the Textbox is focused. Textbox.blur(fn, ···)  This listener is triggered when the Textbox is unfocused/blurred.  Event Parameters Parameters ▼    Guides Real Time Speech Recognition   ← State Timer →     Status  
+
+
+
+

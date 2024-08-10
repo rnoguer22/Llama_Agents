@@ -1,0 +1,35 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Introduction    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Tab AnnotatedImage → Components Introduction Gradio includes pre-built components that can be used as inputs or outputs in your Interface or Blocks with a single line of code. Components include preprocessing steps that convert user data submitted through browser to something that be can used by a Python function, and postprocessing steps to convert values returned by a Python function into something that can be displayed in a browser. Consider an example with three inputs (Textbox, Number, and Image) and two outputs (Number and Gallery), below is a diagram of what our preprocessing will send to the function and what our postprocessing will require from it.  Events Components also come with certain events that they support. These are methods that are triggered with user actions. Below is a table showing which events are supported for each component. All events are also listed (with parameters) in the component’s docs.  clearsubmituploaddeleteblureditstreamtickstart_recordingkey_upchangeinputselectlikepause_recordingendstop_recordingdouble_clickplaystoppausefocusapplyclickrelease AnnotatedImage ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  Audio ✓ ✕ ✓ ✕ ✕ ✕ ✓ ✕ ✓ ✕ ✓ ✓ ✕ ✕ ✓ ✕ ✓ ✕ ✓ ✓ ✓ ✕ ✕ ✕ ✕  Button ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕  Chatbot ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  Checkbox ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  CheckboxGroup ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  ClearButton ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕  Code ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕  ColorPicker ✕ ✓ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕  Dataframe ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  Dataset ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕  DateTime ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  DownloadButton ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕  Dropdown ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✓ ✓ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕  DuplicateButton ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕  File ✓ ✕ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  FileExplorer ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  Gallery ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  HighlightedText ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  HTML ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  Image ✓ ✕ ✓ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✓ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  ImageEditor ✓ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕  JSON ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  Label ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  LoginButton ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕  LogoutButton ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕  Markdown ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  Model3D ✓ ✕ ✓ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  MultimodalTextbox ✕ ✓ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✓ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕  BarPlot ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕  LinePlot ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕  ScatterPlot ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕  Number ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕  ParamViewer ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  Plot ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  Radio ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  Slider ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓  State ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  Textbox ✕ ✓ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✓ ✓ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕  Timer ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕  UploadButton ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕  Video ✓ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✓ ✕ ✕ ✕ ✕ ✓ ✓ ✕ ✓ ✓ ✓ ✕ ✕ ✕ ✕  SimpleImage ✓ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✓ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕ ✕   ← Tab AnnotatedImage →     Status  
+
+
+
+

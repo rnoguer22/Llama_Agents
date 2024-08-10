@@ -1,0 +1,106 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  ImageEditor    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Image JSON →  ImageEditor gradio.ImageEditor(···) import gradio as gr 
+with gr.Blocks() as demo:
+    gr.ImageEditor()
+demo.launch() Description Creates an image component that, as an input, can be used to upload and edit images using simple editing tools such as brushes, strokes, cropping, and layers. Or, as an output, this component can be used to display images.  Behavior As input component: Passes the uploaded images as an instance of EditorValue, which is just a dict with keys: 'background', 'layers', and 'composite'. The values corresponding to 'background' and 'composite' are images, while 'layers' is a list of images. The images are of type PIL.Image, np.array, or str filepath, depending on the type parameter. Your function should accept one of these types: def predict(
+	value: EditorValue | None
+)
+	...  As output component: Expects a EditorValue, which is just a dictionary with keys: 'background', 'layers', and 'composite'. The values corresponding to 'background' and 'composite' should be images or None, while layers should be a list of images. Images can be of type PIL.Image, np.array, or str filepath/URL. Or, the value can be simply a single image (ImageType), in which case it will be used as the background. Your function should return one of these types: def predict(···) -> EditorValue | ImageType | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.ImageEditor  "imageeditor" Uses default values gradio.Sketchpad  "sketchpad" Uses sources=(), brush=Brush(colors=["#000000"], color_mode="fixed") gradio.Paint  "paint" Uses sources=() gradio.ImageMask  "imagemask" Uses brush=Brush(colors=["#000000"], color_mode="fixed")  Demos image_editor  Open in 🎢 ↗ import gradio as gr
+import time
+
+def sleep(im):
+    time.sleep(5)
+    return [im["background"], im["layers"][0], im["layers"][1], im["composite"]]
+
+def predict(im):
+    return im["composite"]
+
+with gr.Blocks() as demo:
+    with gr.Row():
+        im = gr.ImageEditor(
+            type="numpy",
+            crop_size="1:1",
+        )
+        im_preview = gr.Image()
+    n_upload = gr.Number(0, label="Number of upload events", step=1)
+    n_change = gr.Number(0, label="Number of change events", step=1)
+    n_input = gr.Number(0, label="Number of input events", step=1)
+
+    im.upload(lambda x: x + 1, outputs=n_upload, inputs=n_upload)
+    im.change(lambda x: x + 1, outputs=n_change, inputs=n_change)
+    im.input(lambda x: x + 1, outputs=n_input, inputs=n_input)
+    im.change(predict, outputs=im_preview, inputs=im, show_progress="hidden")
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+import time
+
+def sleep(im):
+    time.sleep(5)
+    return [im["background"], im["layers"][0], im["layers"][1], im["composite"]]
+
+def predict(im):
+    return im["composite"]
+
+with gr.Blocks() as demo:
+    with gr.Row():
+        im = gr.ImageEditor(
+            type="numpy",
+            crop_size="1:1",
+        )
+        im_preview = gr.Image()
+    n_upload = gr.Number(0, label="Number of upload events", step=1)
+    n_change = gr.Number(0, label="Number of change events", step=1)
+    n_input = gr.Number(0, label="Number of input events", step=1)
+
+    im.upload(lambda x: x + 1, outputs=n_upload, inputs=n_upload)
+    im.change(lambda x: x + 1, outputs=n_change, inputs=n_change)
+    im.input(lambda x: x + 1, outputs=n_input, inputs=n_input)
+    im.change(predict, outputs=im_preview, inputs=im, show_progress="hidden")
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The ImageEditor
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description ImageEditor.clear(fn, ···)  This listener is triggered when the user clears the ImageEditor using the X button for the component. ImageEditor.change(fn, ···)  Triggered when the value of the ImageEditor changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. ImageEditor.input(fn, ···)  This listener is triggered when the user changes the value of the ImageEditor. ImageEditor.select(fn, ···)  Event listener for when the user selects or deselects the ImageEditor. Uses event data gradio.SelectData to carry value referring to the label of the ImageEditor, and selected to refer to state of the ImageEditor. See EventData documentation on how to use this event data ImageEditor.upload(fn, ···)  This listener is triggered when the user uploads a file into the ImageEditor. ImageEditor.apply(fn, ···)  This listener is triggered when the user applies changes to the ImageEditor through an integrated UI action.  Event Parameters Parameters ▼    Helper Classes  Brush gradio.Brush(···) Description A dataclass for specifying options for the brush tool in the ImageEditor component. An instance of this class can be passed to the brush parameter of gr.ImageEditor. Initialization Parameters ▼  Eraser gradio.Eraser(···) Description A dataclass for specifying options for the eraser tool in the ImageEditor component. An instance of this class can be passed to the eraser parameter of gr.ImageEditor. Initialization Parameters ▼   ← Image JSON →     Status  
+
+
+
+

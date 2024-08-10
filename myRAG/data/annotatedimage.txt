@@ -1,0 +1,184 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  AnnotatedImage    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Introduction Audio →  AnnotatedImage gradio.AnnotatedImage(···) import gradio as gr
+import numpy as np 
+import requests 
+from io import BytesIO
+from PIL import Image
+base_image = "https://gradio-docs-json.s3.us-west-2.amazonaws.com/base.png"
+building_image = requests.get("https://gradio-docs-json.s3.us-west-2.amazonaws.com/buildings.png")
+building_image = np.asarray(Image.open(BytesIO(building_image.content)))[:, :, -1] > 0
+with gr.Blocks() as demo:
+    gr.AnnotatedImage(
+        value=(base_image, [(building_image, "buildings")]),
+        height=500,
+    )
+demo.launch()
+requests
+pillow Description Creates a component to displays a base image and colored annotations on top of that image. Annotations can take the from of rectangles (e.g. object detection) or masks (e.g. image segmentation). As this component does not accept user input, it is rarely used as an input component.  Behavior As input component: Passes its value as a tuple consisting of a str filepath to a base image and list of annotations. Each annotation itself is tuple of a mask (as a str filepath to image) and a str label. Your function should accept one of these types: def predict(
+	value: tuple[str, list[tuple[str, str]]] | None
+)
+	...  As output component: Expects a a tuple of a base image and list of annotations: a tuple[Image, list[Annotation]]. The Image itself can be str filepath, numpy.ndarray, or PIL.Image. Each Annotation is a tuple[Mask, str]. The Mask can be either a tuple of 4 int's representing the bounding box coordinates (x1, y1, x2, y2), or 0-1 confidence mask in the form of a numpy.ndarray of the same shape as the image, while the second element of the Annotation tuple is a str label. Your function should return one of these types: def predict(···) -> tuple[np.ndarray | PIL.Image.Image | str, list[tuple[np.ndarray | tuple[int, int, int, int], str]]] | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.AnnotatedImage  "annotatedimage" Uses default values  Demos image_segmentation  Open in 🎢 ↗ import gradio as gr
+import numpy as np
+import random
+
+with gr.Blocks() as demo:
+    section_labels = [
+        "apple",
+        "banana",
+        "carrot",
+        "donut",
+        "eggplant",
+        "fish",
+        "grapes",
+        "hamburger",
+        "ice cream",
+        "juice",
+    ]
+
+    with gr.Row():
+        num_boxes = gr.Slider(0, 5, 2, step=1, label="Number of boxes")
+        num_segments = gr.Slider(0, 5, 1, step=1, label="Number of segments")
+
+    with gr.Row():
+        img_input = gr.Image()
+        img_output = gr.AnnotatedImage(
+            color_map={"banana": "#a89a00", "carrot": "#ffae00"}
+        )
+
+    section_btn = gr.Button("Identify Sections")
+    selected_section = gr.Textbox(label="Selected Section")
+
+    def section(img, num_boxes, num_segments):
+        sections = []
+        for a in range(num_boxes):
+            x = random.randint(0, img.shape[1])
+            y = random.randint(0, img.shape[0])
+            w = random.randint(0, img.shape[1] - x)
+            h = random.randint(0, img.shape[0] - y)
+            sections.append(((x, y, x + w, y + h), section_labels[a]))
+        for b in range(num_segments):
+            x = random.randint(0, img.shape[1])
+            y = random.randint(0, img.shape[0])
+            r = random.randint(0, min(x, y, img.shape[1] - x, img.shape[0] - y))
+            mask = np.zeros(img.shape[:2])
+            for i in range(img.shape[0]):
+                for j in range(img.shape[1]):
+                    dist_square = (i - y) ** 2 + (j - x) ** 2
+                    if dist_square < r**2:
+                        mask[i, j] = round((r**2 - dist_square) / r**2 * 4) / 4
+            sections.append((mask, section_labels[b + num_boxes]))
+        return (img, sections)
+
+    section_btn.click(section, [img_input, num_boxes, num_segments], img_output)
+
+    def select_section(evt: gr.SelectData):
+        return section_labels[evt.index]
+
+    img_output.select(select_section, None, selected_section)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+import numpy as np
+import random
+
+with gr.Blocks() as demo:
+    section_labels = [
+        "apple",
+        "banana",
+        "carrot",
+        "donut",
+        "eggplant",
+        "fish",
+        "grapes",
+        "hamburger",
+        "ice cream",
+        "juice",
+    ]
+
+    with gr.Row():
+        num_boxes = gr.Slider(0, 5, 2, step=1, label="Number of boxes")
+        num_segments = gr.Slider(0, 5, 1, step=1, label="Number of segments")
+
+    with gr.Row():
+        img_input = gr.Image()
+        img_output = gr.AnnotatedImage(
+            color_map={"banana": "#a89a00", "carrot": "#ffae00"}
+        )
+
+    section_btn = gr.Button("Identify Sections")
+    selected_section = gr.Textbox(label="Selected Section")
+
+    def section(img, num_boxes, num_segments):
+        sections = []
+        for a in range(num_boxes):
+            x = random.randint(0, img.shape[1])
+            y = random.randint(0, img.shape[0])
+            w = random.randint(0, img.shape[1] - x)
+            h = random.randint(0, img.shape[0] - y)
+            sections.append(((x, y, x + w, y + h), section_labels[a]))
+        for b in range(num_segments):
+            x = random.randint(0, img.shape[1])
+            y = random.randint(0, img.shape[0])
+            r = random.randint(0, min(x, y, img.shape[1] - x, img.shape[0] - y))
+            mask = np.zeros(img.shape[:2])
+            for i in range(img.shape[0]):
+                for j in range(img.shape[1]):
+                    dist_square = (i - y) ** 2 + (j - x) ** 2
+                    if dist_square < r**2:
+                        mask[i, j] = round((r**2 - dist_square) / r**2 * 4) / 4
+            sections.append((mask, section_labels[b + num_boxes]))
+        return (img, sections)
+
+    section_btn.click(section, [img_input, num_boxes, num_segments], img_output)
+
+    def select_section(evt: gr.SelectData):
+        return section_labels[evt.index]
+
+    img_output.select(select_section, None, selected_section)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The AnnotatedImage
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description AnnotatedImage.select(fn, ···)  Event listener for when the user selects or deselects the AnnotatedImage. Uses event data gradio.SelectData to carry value referring to the label of the AnnotatedImage, and selected to refer to state of the AnnotatedImage. See EventData documentation on how to use this event data  Event Parameters Parameters ▼     ← Introduction Audio →     Status  
+
+
+
+

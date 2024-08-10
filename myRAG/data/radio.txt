@@ -1,0 +1,215 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Radio    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Plot ScatterPlot →  Radio gradio.Radio(···) import gradio as gr 
+with gr.Blocks() as demo:
+    gr.Radio(choices=["First Choice", "Second Choice", "Third Choice"])
+demo.launch() Description Creates a set of (string or numeric type) radio buttons of which only one can be selected.  Behavior As input component: Passes the value of the selected radio button as a str | int | float, or its index as an int into the function, depending on type. Your function should accept one of these types: def predict(
+	value: str | int | float | None
+)
+	...  As output component: Expects a str | int | float corresponding to the value of the radio button to be selected Your function should return one of these types: def predict(···) -> str | int | float | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Radio  "radio" Uses default values  Demos sentence_builderblocks_essay  Open in 🎢 ↗ import gradio as gr
+
+def sentence_builder(quantity, animal, countries, place, activity_list, morning):
+    return f"""The {quantity} {animal}s from {" and ".join(countries)} went to the {place} where they {" and ".join(activity_list)} until the {"morning" if morning else "night"}"""
+
+demo = gr.Interface(
+    sentence_builder,
+    [
+        gr.Slider(2, 20, value=4, label="Count", info="Choose between 2 and 20"),
+        gr.Dropdown(
+            ["cat", "dog", "bird"], label="Animal", info="Will add more animals later!"
+        ),
+        gr.CheckboxGroup(["USA", "Japan", "Pakistan"], label="Countries", info="Where are they from?"),
+        gr.Radio(["park", "zoo", "road"], label="Location", info="Where did they go?"),
+        gr.Dropdown(
+            ["ran", "swam", "ate", "slept"], value=["swam", "slept"], multiselect=True, label="Activity", info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, nisl eget ultricies aliquam, nunc nisl aliquet nunc, eget aliquam nisl nunc vel nisl."
+        ),
+        gr.Checkbox(label="Morning", info="Did they do it in the morning?"),
+    ],
+    "text",
+    examples=[
+        [2, "cat", ["Japan", "Pakistan"], "park", ["ate", "swam"], True],
+        [4, "dog", ["Japan"], "zoo", ["ate", "swam"], False],
+        [10, "bird", ["USA", "Pakistan"], "road", ["ran"], False],
+        [8, "cat", ["Pakistan"], "zoo", ["ate"], True],
+    ]
+)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def sentence_builder(quantity, animal, countries, place, activity_list, morning):
+    return f"""The {quantity} {animal}s from {" and ".join(countries)} went to the {place} where they {" and ".join(activity_list)} until the {"morning" if morning else "night"}"""
+
+demo = gr.Interface(
+    sentence_builder,
+    [
+        gr.Slider(2, 20, value=4, label="Count", info="Choose between 2 and 20"),
+        gr.Dropdown(
+            ["cat", "dog", "bird"], label="Animal", info="Will add more animals later!"
+        ),
+        gr.CheckboxGroup(["USA", "Japan", "Pakistan"], label="Countries", info="Where are they from?"),
+        gr.Radio(["park", "zoo", "road"], label="Location", info="Where did they go?"),
+        gr.Dropdown(
+            ["ran", "swam", "ate", "slept"], value=["swam", "slept"], multiselect=True, label="Activity", info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, nisl eget ultricies aliquam, nunc nisl aliquet nunc, eget aliquam nisl nunc vel nisl."
+        ),
+        gr.Checkbox(label="Morning", info="Did they do it in the morning?"),
+    ],
+    "text",
+    examples=[
+        [2, "cat", ["Japan", "Pakistan"], "park", ["ate", "swam"], True],
+        [4, "dog", ["Japan"], "zoo", ["ate", "swam"], False],
+        [10, "bird", ["USA", "Pakistan"], "road", ["ran"], False],
+        [8, "cat", ["Pakistan"], "zoo", ["ate"], True],
+    ]
+)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+
+countries_cities_dict = {
+    "USA": ["New York", "Los Angeles", "Chicago"],
+    "Canada": ["Toronto", "Montreal", "Vancouver"],
+    "Pakistan": ["Karachi", "Lahore", "Islamabad"],
+}
+
+def change_textbox(choice):
+    if choice == "short":
+        return gr.Textbox(lines=2, visible=True), gr.Button(interactive=True)
+    elif choice == "long":
+        return gr.Textbox(lines=8, visible=True, value="Lorem ipsum dolor sit amet"), gr.Button(interactive=True)
+    else:
+        return gr.Textbox(visible=False), gr.Button(interactive=False)
+
+with gr.Blocks() as demo:
+    radio = gr.Radio(
+        ["short", "long", "none"], label="What kind of essay would you like to write?"
+    )
+    text = gr.Textbox(lines=2, interactive=True, show_copy_button=True)
+
+    with gr.Row():
+        num = gr.Number(minimum=0, maximum=100, label="input")
+        out = gr.Number(label="output")
+    minimum_slider = gr.Slider(0, 100, 0, label="min")
+    maximum_slider = gr.Slider(0, 100, 100, label="max")
+    submit_btn = gr.Button("Submit", variant="primary")
+
+    with gr.Row():
+        country = gr.Dropdown(list(countries_cities_dict.keys()), label="Country")
+        cities = gr.Dropdown([], label="Cities")
+
+    @country.change(inputs=country, outputs=cities)
+    def update_cities(country):
+        cities = list(countries_cities_dict[country])
+        return gr.Dropdown(choices=cities, value=cities[0], interactive=True)
+
+    def reset_bounds(minimum, maximum):
+        return gr.Number(minimum=minimum, maximum=maximum)
+
+    radio.change(fn=change_textbox, inputs=radio, outputs=[text, submit_btn])
+    gr.on(
+        [minimum_slider.change, maximum_slider.change],
+        reset_bounds,
+        [minimum_slider, maximum_slider],
+        outputs=num,
+    )
+    num.submit(lambda x: x, num, out)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+countries_cities_dict = {
+    "USA": ["New York", "Los Angeles", "Chicago"],
+    "Canada": ["Toronto", "Montreal", "Vancouver"],
+    "Pakistan": ["Karachi", "Lahore", "Islamabad"],
+}
+
+def change_textbox(choice):
+    if choice == "short":
+        return gr.Textbox(lines=2, visible=True), gr.Button(interactive=True)
+    elif choice == "long":
+        return gr.Textbox(lines=8, visible=True, value="Lorem ipsum dolor sit amet"), gr.Button(interactive=True)
+    else:
+        return gr.Textbox(visible=False), gr.Button(interactive=False)
+
+with gr.Blocks() as demo:
+    radio = gr.Radio(
+        ["short", "long", "none"], label="What kind of essay would you like to write?"
+    )
+    text = gr.Textbox(lines=2, interactive=True, show_copy_button=True)
+
+    with gr.Row():
+        num = gr.Number(minimum=0, maximum=100, label="input")
+        out = gr.Number(label="output")
+    minimum_slider = gr.Slider(0, 100, 0, label="min")
+    maximum_slider = gr.Slider(0, 100, 100, label="max")
+    submit_btn = gr.Button("Submit", variant="primary")
+
+    with gr.Row():
+        country = gr.Dropdown(list(countries_cities_dict.keys()), label="Country")
+        cities = gr.Dropdown([], label="Cities")
+
+    @country.change(inputs=country, outputs=cities)
+    def update_cities(country):
+        cities = list(countries_cities_dict[country])
+        return gr.Dropdown(choices=cities, value=cities[0], interactive=True)
+
+    def reset_bounds(minimum, maximum):
+        return gr.Number(minimum=minimum, maximum=maximum)
+
+    radio.change(fn=change_textbox, inputs=radio, outputs=[text, submit_btn])
+    gr.on(
+        [minimum_slider.change, maximum_slider.change],
+        reset_bounds,
+        [minimum_slider, maximum_slider],
+        outputs=num,
+    )
+    num.submit(lambda x: x, num, out)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Radio
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Radio.select(fn, ···)  Event listener for when the user selects or deselects the Radio. Uses event data gradio.SelectData to carry value referring to the label of the Radio, and selected to refer to state of the Radio. See EventData documentation on how to use this event data Radio.change(fn, ···)  Triggered when the value of the Radio changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Radio.input(fn, ···)  This listener is triggered when the user changes the value of the Radio.  Event Parameters Parameters ▼     ← Plot ScatterPlot →     Status  
+
+
+
+

@@ -1,0 +1,173 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Number    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← MultimodalTextbox ParamViewer →  Number gradio.Number(···) import gradio as gr 
+with gr.Blocks() as demo:
+    gr.Number()
+demo.launch() Description Creates a numeric field for user to enter numbers as input or display numeric output.  Behavior As input component: Passes field value as a float or int into the function, depending on precision. Your function should accept one of these types: def predict(
+	value: float | int | None
+)
+	...  As output component: Expects an int or float returned from the function and sets field value to it. Your function should return one of these types: def predict(···) -> float | int | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Number  "number" Uses default values  Demos tax_calculatorblocks_simple_squares  Open in 🎢 ↗ import gradio as gr
+
+def tax_calculator(income, marital_status, assets):
+    tax_brackets = [(10, 0), (25, 8), (60, 12), (120, 20), (250, 30)]
+    total_deductible = sum(assets["Cost"])
+    taxable_income = income - total_deductible
+
+    total_tax = 0
+    for bracket, rate in tax_brackets:
+        if taxable_income > bracket:
+            total_tax += (taxable_income - bracket) * rate / 100
+
+    if marital_status == "Married":
+        total_tax *= 0.75
+    elif marital_status == "Divorced":
+        total_tax *= 0.8
+
+    return round(total_tax)
+
+demo = gr.Interface(
+    tax_calculator,
+    [
+        "number",
+        gr.Radio(["Single", "Married", "Divorced"]),
+        gr.Dataframe(
+            headers=["Item", "Cost"],
+            datatype=["str", "number"],
+            label="Assets Purchased this Year",
+        ),
+    ],
+    "number",
+    examples=[
+        [10000, "Married", [["Suit", 5000], ["Laptop", 800], ["Car", 1800]]],
+        [80000, "Single", [["Suit", 800], ["Watch", 1800], ["Car", 800]]],
+    ],
+)
+
+demo.launch()
+ import gradio as gr
+
+def tax_calculator(income, marital_status, assets):
+    tax_brackets = [(10, 0), (25, 8), (60, 12), (120, 20), (250, 30)]
+    total_deductible = sum(assets["Cost"])
+    taxable_income = income - total_deductible
+
+    total_tax = 0
+    for bracket, rate in tax_brackets:
+        if taxable_income > bracket:
+            total_tax += (taxable_income - bracket) * rate / 100
+
+    if marital_status == "Married":
+        total_tax *= 0.75
+    elif marital_status == "Divorced":
+        total_tax *= 0.8
+
+    return round(total_tax)
+
+demo = gr.Interface(
+    tax_calculator,
+    [
+        "number",
+        gr.Radio(["Single", "Married", "Divorced"]),
+        gr.Dataframe(
+            headers=["Item", "Cost"],
+            datatype=["str", "number"],
+            label="Assets Purchased this Year",
+        ),
+    ],
+    "number",
+    examples=[
+        [10000, "Married", [["Suit", 5000], ["Laptop", 800], ["Car", 1800]]],
+        [80000, "Single", [["Suit", 800], ["Watch", 1800], ["Car", 800]]],
+    ],
+)
+
+demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+
+demo = gr.Blocks(css="""#btn {color: red} .abc {font-family: "Comic Sans MS", "Comic Sans", cursive !important}""")
+
+with demo:
+    default_json = {"a": "a"}
+
+    num = gr.State(value=0)
+    squared = gr.Number(value=0)
+    btn = gr.Button("Next Square", elem_id="btn", elem_classes=["abc", "def"])
+
+    stats = gr.State(value=default_json)
+    table = gr.JSON()
+
+    def increase(var, stats_history):
+        var += 1
+        stats_history[str(var)] = var**2
+        return var, var**2, stats_history, stats_history
+
+    btn.click(increase, [num, stats], [num, squared, stats, table])
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+demo = gr.Blocks(css="""#btn {color: red} .abc {font-family: "Comic Sans MS", "Comic Sans", cursive !important}""")
+
+with demo:
+    default_json = {"a": "a"}
+
+    num = gr.State(value=0)
+    squared = gr.Number(value=0)
+    btn = gr.Button("Next Square", elem_id="btn", elem_classes=["abc", "def"])
+
+    stats = gr.State(value=default_json)
+    table = gr.JSON()
+
+    def increase(var, stats_history):
+        var += 1
+        stats_history[str(var)] = var**2
+        return var, var**2, stats_history, stats_history
+
+    btn.click(increase, [num, stats], [num, squared, stats, table])
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Number
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Number.change(fn, ···)  Triggered when the value of the Number changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Number.input(fn, ···)  This listener is triggered when the user changes the value of the Number. Number.submit(fn, ···)  This listener is triggered when the user presses the Enter key while the Number is focused. Number.focus(fn, ···)  This listener is triggered when the Number is focused.  Event Parameters Parameters ▼     ← MultimodalTextbox ParamViewer →     Status  
+
+
+
+

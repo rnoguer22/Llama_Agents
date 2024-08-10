@@ -1,0 +1,51 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Blocks Layout  render    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Blocks Accordion →  render @gr.render(inputs=···)
+def hello(···):
+   ...  Description The render decorator allows Gradio Blocks apps to have dynamic layouts, so that the components and event listeners in your app can change depending on custom logic. Attaching a @gr.render decorator to a function will cause the function to be re-run whenever the inputs are changed (or specified triggers are activated). The function contains the components and event listeners that will update based on the inputs.  The basic usage of @gr.render is as follows:  1. Create a function and attach the @gr.render decorator to it.  2. Add the input components to the inputs= argument of @gr.render, and create a corresponding argument in your function for each component.  3. Add all components inside the function that you want to update based on the inputs. Any event listeners that use these components should also be inside this function.  Example Usage import gradio as gr
+
+with gr.Blocks() as demo:
+    input_text = gr.Textbox()
+
+    @gr.render(inputs=input_text)
+    def show_split(text):
+        if len(text) == 0:
+            gr.Markdown("## No Input Provided")
+        else:
+            for letter in text:
+                with gr.Row():
+                    text = gr.Textbox(letter)
+                    btn = gr.Button("Clear")
+                    btn.click(lambda: gr.Textbox(value=""), None, text) Initialization Parameters ▼  Guides Dynamic Apps with the Render Decorator   ← Blocks Accordion →     Status  
+
+
+
+

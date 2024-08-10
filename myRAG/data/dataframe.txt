@@ -1,0 +1,264 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Dataframe    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← ColorPicker Dataset →  Dataframe gradio.Dataframe(···) import gradio as gr
+with gr.Blocks() as demo:
+    gr.Dataframe(value=
+    [
+        [0, 1, True],
+        [1, 0, False]
+    ]
+    , interactive=True)
+demo.launch() Description This component displays a table of value spreadsheet-like component. Can be used to display data as an output component, or as an input to collect data from the user. Behavior As input component: Passes the uploaded spreadsheet data as a pandas.DataFrame, numpy.array, polars.DataFrame, or native 2D Python list[list] depending on type Your function should accept one of these types: def predict(
+	value: pd.DataFrame | np.ndarray | pl.DataFrame | list[list]
+)
+	...  As output component: Expects data any of these formats: pandas.DataFrame, pandas.Styler, numpy.array, polars.DataFrame, list[list], list, or a dict with keys 'data' (and optionally 'headers'), or str path to a csv, which is rendered as the spreadsheet. Your function should return one of these types: def predict(···) -> pd.DataFrame | Styler | np.ndarray | pl.DataFrame | list | list[list] | dict | str | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Dataframe  "dataframe" Uses default values gradio.Numpy  "numpy" Uses type="numpy" gradio.Matrix  "matrix" Uses type="array" gradio.List  "list" Uses type="array", col_count=1  Demos filter_recordsmatrix_transposetax_calculatorsort_records  Open in 🎢 ↗ import gradio as gr
+
+def filter_records(records, gender):
+    return records[records["gender"] == gender]
+
+demo = gr.Interface(
+    filter_records,
+    [
+        gr.Dataframe(
+            headers=["name", "age", "gender"],
+            datatype=["str", "number", "str"],
+            row_count=5,
+            col_count=(3, "fixed"),
+        ),
+        gr.Dropdown(["M", "F", "O"]),
+    ],
+    "dataframe",
+    description="Enter gender as 'M', 'F', or 'O' for other.",
+)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def filter_records(records, gender):
+    return records[records["gender"] == gender]
+
+demo = gr.Interface(
+    filter_records,
+    [
+        gr.Dataframe(
+            headers=["name", "age", "gender"],
+            datatype=["str", "number", "str"],
+            row_count=5,
+            col_count=(3, "fixed"),
+        ),
+        gr.Dropdown(["M", "F", "O"]),
+    ],
+    "dataframe",
+    description="Enter gender as 'M', 'F', or 'O' for other.",
+)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import numpy as np
+
+import gradio as gr
+
+def transpose(matrix):
+    return matrix.T
+
+demo = gr.Interface(
+    transpose,
+    gr.Dataframe(type="numpy", datatype="number", row_count=5, col_count=3),
+    "numpy",
+    examples=[
+        [np.zeros((3, 3)).tolist()],
+        [np.ones((2, 2)).tolist()],
+        [np.random.randint(0, 10, (3, 10)).tolist()],
+        [np.random.randint(0, 10, (10, 3)).tolist()],
+        [np.random.randint(0, 10, (10, 10)).tolist()],
+    ],
+    cache_examples=False
+)
+
+if __name__ == "__main__":
+    demo.launch()
+ import numpy as np
+
+import gradio as gr
+
+def transpose(matrix):
+    return matrix.T
+
+demo = gr.Interface(
+    transpose,
+    gr.Dataframe(type="numpy", datatype="number", row_count=5, col_count=3),
+    "numpy",
+    examples=[
+        [np.zeros((3, 3)).tolist()],
+        [np.ones((2, 2)).tolist()],
+        [np.random.randint(0, 10, (3, 10)).tolist()],
+        [np.random.randint(0, 10, (10, 3)).tolist()],
+        [np.random.randint(0, 10, (10, 10)).tolist()],
+    ],
+    cache_examples=False
+)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+
+def tax_calculator(income, marital_status, assets):
+    tax_brackets = [(10, 0), (25, 8), (60, 12), (120, 20), (250, 30)]
+    total_deductible = sum(assets["Cost"])
+    taxable_income = income - total_deductible
+
+    total_tax = 0
+    for bracket, rate in tax_brackets:
+        if taxable_income > bracket:
+            total_tax += (taxable_income - bracket) * rate / 100
+
+    if marital_status == "Married":
+        total_tax *= 0.75
+    elif marital_status == "Divorced":
+        total_tax *= 0.8
+
+    return round(total_tax)
+
+demo = gr.Interface(
+    tax_calculator,
+    [
+        "number",
+        gr.Radio(["Single", "Married", "Divorced"]),
+        gr.Dataframe(
+            headers=["Item", "Cost"],
+            datatype=["str", "number"],
+            label="Assets Purchased this Year",
+        ),
+    ],
+    "number",
+    examples=[
+        [10000, "Married", [["Suit", 5000], ["Laptop", 800], ["Car", 1800]]],
+        [80000, "Single", [["Suit", 800], ["Watch", 1800], ["Car", 800]]],
+    ],
+)
+
+demo.launch()
+ import gradio as gr
+
+def tax_calculator(income, marital_status, assets):
+    tax_brackets = [(10, 0), (25, 8), (60, 12), (120, 20), (250, 30)]
+    total_deductible = sum(assets["Cost"])
+    taxable_income = income - total_deductible
+
+    total_tax = 0
+    for bracket, rate in tax_brackets:
+        if taxable_income > bracket:
+            total_tax += (taxable_income - bracket) * rate / 100
+
+    if marital_status == "Married":
+        total_tax *= 0.75
+    elif marital_status == "Divorced":
+        total_tax *= 0.8
+
+    return round(total_tax)
+
+demo = gr.Interface(
+    tax_calculator,
+    [
+        "number",
+        gr.Radio(["Single", "Married", "Divorced"]),
+        gr.Dataframe(
+            headers=["Item", "Cost"],
+            datatype=["str", "number"],
+            label="Assets Purchased this Year",
+        ),
+    ],
+    "number",
+    examples=[
+        [10000, "Married", [["Suit", 5000], ["Laptop", 800], ["Car", 1800]]],
+        [80000, "Single", [["Suit", 800], ["Watch", 1800], ["Car", 800]]],
+    ],
+)
+
+demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+
+def sort_records(records):
+    return records.sort("Quantity")
+
+demo = gr.Interface(
+    sort_records,
+    gr.Dataframe(
+        headers=["Item", "Quantity"],
+        datatype=["str", "number"],
+        row_count=3,
+        col_count=(2, "fixed"),
+        type="polars"
+    ),
+    "dataframe",
+    description="Sort by Quantity"
+)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def sort_records(records):
+    return records.sort("Quantity")
+
+demo = gr.Interface(
+    sort_records,
+    gr.Dataframe(
+        headers=["Item", "Quantity"],
+        datatype=["str", "number"],
+        row_count=3,
+        col_count=(2, "fixed"),
+        type="polars"
+    ),
+    "dataframe",
+    description="Sort by Quantity"
+)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Dataframe
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Dataframe.change(fn, ···)  Triggered when the value of the Dataframe changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Dataframe.input(fn, ···)  This listener is triggered when the user changes the value of the Dataframe. Dataframe.select(fn, ···)  Event listener for when the user selects or deselects the Dataframe. Uses event data gradio.SelectData to carry value referring to the label of the Dataframe, and selected to refer to state of the Dataframe. See EventData documentation on how to use this event data  Event Parameters Parameters ▼     ← ColorPicker Dataset →     Status  
+
+
+
+

@@ -1,0 +1,110 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Dropdown    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← DownloadButton DuplicateButton →  Dropdown gradio.Dropdown(···) import gradio as gr 
+with gr.Blocks() as demo:
+    gr.Dropdown(choices=["First Choice", "Second Choice", "Third Choice"])
+demo.launch() Description Creates a dropdown of choices from which a single entry or multiple entries can be selected (as an input component) or displayed (as an output component).  Behavior As input component: Passes the value of the selected dropdown choice as a str | int | float or its index as an int into the function, depending on type. Or, if multiselect is True, passes the values of the selected dropdown choices as a list of correspoding values/indices instead. Your function should accept one of these types: def predict(
+	value: str | int | float | list[str | int | float] | list[int | None] | None
+)
+	...  As output component: Expects a str | int | float corresponding to the value of the dropdown entry to be selected. Or, if multiselect is True, expects a list of values corresponding to the selected dropdown entries. Your function should return one of these types: def predict(···) -> str | int | float | list[str | int | float] | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Dropdown  "dropdown" Uses default values  Demos sentence_builder  Open in 🎢 ↗ import gradio as gr
+
+def sentence_builder(quantity, animal, countries, place, activity_list, morning):
+    return f"""The {quantity} {animal}s from {" and ".join(countries)} went to the {place} where they {" and ".join(activity_list)} until the {"morning" if morning else "night"}"""
+
+demo = gr.Interface(
+    sentence_builder,
+    [
+        gr.Slider(2, 20, value=4, label="Count", info="Choose between 2 and 20"),
+        gr.Dropdown(
+            ["cat", "dog", "bird"], label="Animal", info="Will add more animals later!"
+        ),
+        gr.CheckboxGroup(["USA", "Japan", "Pakistan"], label="Countries", info="Where are they from?"),
+        gr.Radio(["park", "zoo", "road"], label="Location", info="Where did they go?"),
+        gr.Dropdown(
+            ["ran", "swam", "ate", "slept"], value=["swam", "slept"], multiselect=True, label="Activity", info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, nisl eget ultricies aliquam, nunc nisl aliquet nunc, eget aliquam nisl nunc vel nisl."
+        ),
+        gr.Checkbox(label="Morning", info="Did they do it in the morning?"),
+    ],
+    "text",
+    examples=[
+        [2, "cat", ["Japan", "Pakistan"], "park", ["ate", "swam"], True],
+        [4, "dog", ["Japan"], "zoo", ["ate", "swam"], False],
+        [10, "bird", ["USA", "Pakistan"], "road", ["ran"], False],
+        [8, "cat", ["Pakistan"], "zoo", ["ate"], True],
+    ]
+)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+
+def sentence_builder(quantity, animal, countries, place, activity_list, morning):
+    return f"""The {quantity} {animal}s from {" and ".join(countries)} went to the {place} where they {" and ".join(activity_list)} until the {"morning" if morning else "night"}"""
+
+demo = gr.Interface(
+    sentence_builder,
+    [
+        gr.Slider(2, 20, value=4, label="Count", info="Choose between 2 and 20"),
+        gr.Dropdown(
+            ["cat", "dog", "bird"], label="Animal", info="Will add more animals later!"
+        ),
+        gr.CheckboxGroup(["USA", "Japan", "Pakistan"], label="Countries", info="Where are they from?"),
+        gr.Radio(["park", "zoo", "road"], label="Location", info="Where did they go?"),
+        gr.Dropdown(
+            ["ran", "swam", "ate", "slept"], value=["swam", "slept"], multiselect=True, label="Activity", info="Lorem ipsum dolor sit amet, consectetur adipiscing elit. Sed auctor, nisl eget ultricies aliquam, nunc nisl aliquet nunc, eget aliquam nisl nunc vel nisl."
+        ),
+        gr.Checkbox(label="Morning", info="Did they do it in the morning?"),
+    ],
+    "text",
+    examples=[
+        [2, "cat", ["Japan", "Pakistan"], "park", ["ate", "swam"], True],
+        [4, "dog", ["Japan"], "zoo", ["ate", "swam"], False],
+        [10, "bird", ["USA", "Pakistan"], "road", ["ran"], False],
+        [8, "cat", ["Pakistan"], "zoo", ["ate"], True],
+    ]
+)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Dropdown
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Dropdown.change(fn, ···)  Triggered when the value of the Dropdown changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Dropdown.input(fn, ···)  This listener is triggered when the user changes the value of the Dropdown. Dropdown.select(fn, ···)  Event listener for when the user selects or deselects the Dropdown. Uses event data gradio.SelectData to carry value referring to the label of the Dropdown, and selected to refer to state of the Dropdown. See EventData documentation on how to use this event data Dropdown.focus(fn, ···)  This listener is triggered when the Dropdown is focused. Dropdown.blur(fn, ···)  This listener is triggered when the Dropdown is unfocused/blurred. Dropdown.key_up(fn, ···)  This listener is triggered when the user presses a key while the Dropdown is focused.  Event Parameters Parameters ▼     ← DownloadButton DuplicateButton →     Status  
+
+
+
+

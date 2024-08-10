@@ -1,0 +1,347 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Chatbot    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Button Checkbox →  Chatbot gradio.Chatbot(···) import gradio as gr
+with gr.Blocks() as demo:
+    gr.Chatbot(value=[["Hello World","Hey Gradio!"],["❤️","😍"],["🔥","🤗"]])
+demo.launch() Description Creates a chatbot that displays user-submitted messages and responses. Supports a subset of Markdown including bold, italics, code, tables. Also supports audio/video/image files, which are displayed in the Chatbot, and other kinds of files which are displayed as links. This component is usually used as an output component.  Behavior The data format accepted by the Chatbot is dictated by the type parameter.
+This parameter can take two values, 'tuples' and 'messages'. If type is 'tuples', then the data sent to/from the chatbot will be a list of tuples.
+The first element of each tuple is the user message and the second element is the bot’s response.
+Each element can be a string (markdown/html is supported),
+a tuple (in which case the first element is a filepath that will be displayed in the chatbot),
+or a gradio component (see the Examples section for more details). If the type is 'messages', then the data sent to/from the chatbot will be a list of dictionaries
+with role and content keys. This format is compliant with the format expected by most LLM APIs (HuggingChat, OpenAI, Claude).
+The role key is either 'user' or 'assistant’and thecontentkey can be a string (markdown/html supported), aFileDataDict` (to represent a file that is displayed in the chatbot - documented below), or a gradio component. For convenience, you can use the ChatMessage dataclass so that your text editor can give you autocomplete hints and typechecks. from gradio import ChatMessage
+
+def generate_response(history):
+    history.append(
+        ChatMessage(role="assistant",
+                    content="How can I help you?")
+        )
+    return history Additionally, when type is messages, you can provide additional metadata regarding any tools used to generate the response.
+This is useful for displaying the thought process of LLM agents. For example, def generate_response(history):
+    history.append(
+        ChatMessage(role="assistant",
+                    content="The weather API says it is 20 degrees Celcius in New York.",
+                    metadata={"title": "🛠️ Used tool Weather API"})
+        )
+    return history Would be displayed as following:  All of the types expected by the messages format are documented below: class MetadataDict(TypedDict):
+    title: Union[str, None]
+
+class FileDataDict(TypedDict):
+    path: str  # server filepath
+    url: NotRequired[Optional[str]]  # normalised server url
+    size: NotRequired[Optional[int]]  # size in bytes
+    orig_name: NotRequired[Optional[str]]  # original filename
+    mime_type: NotRequired[Optional[str]]
+    is_stream: NotRequired[bool]
+    meta: dict[Literal["_type"], Literal["gradio.FileData"]]
+
+
+class MessageDict(TypedDict):
+    content: str | FileDataDict | Component
+    role: Literal["user", "assistant", "system"]
+    metadata: NotRequired[MetadataDict]
+
+
+@dataclass
+class Metadata:
+    title: Optional[str] = None
+
+
+@dataclass
+class ChatMessage:
+    role: Literal["user", "assistant", "system"]
+    content: str | FileData | Component | FileDataDict | tuple | list
+    metadata: MetadataDict | Metadata = field(default_factory=Metadata) As input component: If type is 'tuples', passes the messages in the chatbot as a list[list[str | None | tuple]], i.e. a list of lists. The inner list has 2 elements: the user message and the response message. Each message can be (1) a string in valid Markdown, (2) a tuple if there are displayed files: (a filepath or URL to a file, [optional string alt text]), or (3) None, if there is no message displayed. If type is 'messages', passes the value as a list of dictionaries with 'role' and 'content' keys. The content key's value supports everything the tuples format supports. Your function should accept one of these types: If type is tuples - from gradio import Component
+
+def predict(
+	value: list[list[str | tuple[str, str] | Component | None]] | None
+):
+	... If type is messages - from gradio import MessageDict
+
+def predict(value: list[MessageDict] | None):
+    ...  As output component: If type is tuples, expects a list[list[str | None | tuple]], i.e. a list of lists. The inner list should have 2 elements: the user message and the response message. The individual messages can be (1) strings in valid Markdown, (2) tuples if sending files: (a filepath or URL to a file, [optional string alt text]) -- if the file is image/video/audio, it is displayed in the Chatbot, or (3) None, in which case the message is not displayed. If type is 'messages', passes the value as a list of dictionaries with 'role' and 'content' keys. The content key's value supports everything the tuples format supports. Your function should return one of these types: If type is tuples - def predict(···) -> list[list[str | tuple[str] | tuple[str, str] | None] | tuple] | None
+	...	
+	return value If type is messages - from gradio import ChatMessage, MessageDict def predict(···) - > list[MessageDict] | list[ChatMessage]:
+    ... Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Chatbot  "chatbot" Uses default values  Examples Using Gradio Components Inside gr.Chatbot The Chatbot component supports using many of the core Gradio components (such as gr.Image, gr.Plot, gr.Audio, and gr.HTML) inside of the chatbot. Simply include one of these components in your list of tuples. Here’s an example: import gradio as gr
+
+def load():
+    return [
+        ("Here's an audio", gr.Audio("https://github.com/gradio-app/gradio/raw/main/test/test_files/audio_sample.wav")),
+        ("Here's an video", gr.Video("https://github.com/gradio-app/gradio/raw/main/demo/video_component/files/world.mp4"))
+    ]
+
+with gr.Blocks() as demo:
+    chatbot = gr.Chatbot()
+    button = gr.Button("Load audio and video")
+    button.click(load, None, chatbot)
+
+demo.launch() Demos chatbot_simplechatbot_core_components_simple  Open in 🎢 ↗ import gradio as gr
+import random
+import time
+
+with gr.Blocks() as demo:
+    chatbot = gr.Chatbot()
+    msg = gr.Textbox()
+    clear = gr.ClearButton([msg, chatbot])
+
+    def respond(message, chat_history):
+        bot_message = random.choice(["How are you?", "I love you", "I'm very hungry"])
+        chat_history.append((message, bot_message))
+        time.sleep(2)
+        return "", chat_history
+
+    msg.submit(respond, [msg, chatbot], [msg, chatbot])
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+import random
+import time
+
+with gr.Blocks() as demo:
+    chatbot = gr.Chatbot()
+    msg = gr.Textbox()
+    clear = gr.ClearButton([msg, chatbot])
+
+    def respond(message, chat_history):
+        bot_message = random.choice(["How are you?", "I love you", "I'm very hungry"])
+        chat_history.append((message, bot_message))
+        time.sleep(2)
+        return "", chat_history
+
+    msg.submit(respond, [msg, chatbot], [msg, chatbot])
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Open in 🎢 ↗ import gradio as gr
+import random
+
+# Chatbot demo with multimodal input (text, markdown, LaTeX, code blocks, image, audio, & video). Plus shows support for streaming text.
+
+color_map = {
+    "harmful": "crimson",
+    "neutral": "gray",
+    "beneficial": "green",
+}
+
+def html_src(harm_level):
+    return f"""
+<div style="display: flex; gap: 5px;">
+  <div style="background-color: {color_map[harm_level]}; padding: 2px; border-radius: 5px;">
+  {harm_level}
+  </div>
+</div>
+"""
+
+def print_like_dislike(x: gr.LikeData):
+    print(x.index, x.value, x.liked)
+
+def add_message(history, message):
+    for x in message["files"]:
+        history.append(((x,), None))
+    if message["text"] is not None:
+        history.append((message["text"], None))
+    return history, gr.MultimodalTextbox(value=None, interactive=False)
+
+def bot(history, response_type):
+    if response_type == "gallery":
+        history[-1][1] = gr.Gallery(
+            [
+                "https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png",
+                "https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png",
+            ]
+        )
+    elif response_type == "image":
+        history[-1][1] = gr.Image(
+            "https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png"
+        )
+    elif response_type == "video":
+        history[-1][1] = gr.Video(
+            "https://github.com/gradio-app/gradio/raw/main/demo/video_component/files/world.mp4"
+        )
+    elif response_type == "audio":
+        history[-1][1] = gr.Audio(
+            "https://github.com/gradio-app/gradio/raw/main/test/test_files/audio_sample.wav"
+        )
+    elif response_type == "html":
+        history[-1][1] = gr.HTML(
+            html_src(random.choice(["harmful", "neutral", "beneficial"]))
+        )
+    else:
+        history[-1][1] = "Cool!"
+    return history
+
+with gr.Blocks(fill_height=True) as demo:
+    chatbot = gr.Chatbot(
+        elem_id="chatbot",
+        bubble_full_width=False,
+        scale=1,
+    )
+    response_type = gr.Radio(
+        [
+            "image",
+            "text",
+            "gallery",
+            "video",
+            "audio",
+            "html",
+        ],
+        value="text",
+        label="Response Type",
+    )
+
+    chat_input = gr.MultimodalTextbox(
+        interactive=True,
+        placeholder="Enter message or upload file...",
+        show_label=False,
+    )
+
+    chat_msg = chat_input.submit(
+        add_message, [chatbot, chat_input], [chatbot, chat_input]
+    )
+    bot_msg = chat_msg.then(
+        bot, [chatbot, response_type], chatbot, api_name="bot_response"
+    )
+    bot_msg.then(lambda: gr.MultimodalTextbox(interactive=True), None, [chat_input])
+
+    chatbot.like(print_like_dislike, None, None)
+
+if __name__ == "__main__":
+    demo.launch()
+ import gradio as gr
+import random
+
+# Chatbot demo with multimodal input (text, markdown, LaTeX, code blocks, image, audio, & video). Plus shows support for streaming text.
+
+color_map = {
+    "harmful": "crimson",
+    "neutral": "gray",
+    "beneficial": "green",
+}
+
+def html_src(harm_level):
+    return f"""
+
+  
+  {harm_level}
+  
+
+"""
+
+def print_like_dislike(x: gr.LikeData):
+    print(x.index, x.value, x.liked)
+
+def add_message(history, message):
+    for x in message["files"]:
+        history.append(((x,), None))
+    if message["text"] is not None:
+        history.append((message["text"], None))
+    return history, gr.MultimodalTextbox(value=None, interactive=False)
+
+def bot(history, response_type):
+    if response_type == "gallery":
+        history[-1][1] = gr.Gallery(
+            [
+                "https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png",
+                "https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png",
+            ]
+        )
+    elif response_type == "image":
+        history[-1][1] = gr.Image(
+            "https://raw.githubusercontent.com/gradio-app/gradio/main/test/test_files/bus.png"
+        )
+    elif response_type == "video":
+        history[-1][1] = gr.Video(
+            "https://github.com/gradio-app/gradio/raw/main/demo/video_component/files/world.mp4"
+        )
+    elif response_type == "audio":
+        history[-1][1] = gr.Audio(
+            "https://github.com/gradio-app/gradio/raw/main/test/test_files/audio_sample.wav"
+        )
+    elif response_type == "html":
+        history[-1][1] = gr.HTML(
+            html_src(random.choice(["harmful", "neutral", "beneficial"]))
+        )
+    else:
+        history[-1][1] = "Cool!"
+    return history
+
+with gr.Blocks(fill_height=True) as demo:
+    chatbot = gr.Chatbot(
+        elem_id="chatbot",
+        bubble_full_width=False,
+        scale=1,
+    )
+    response_type = gr.Radio(
+        [
+            "image",
+            "text",
+            "gallery",
+            "video",
+            "audio",
+            "html",
+        ],
+        value="text",
+        label="Response Type",
+    )
+
+    chat_input = gr.MultimodalTextbox(
+        interactive=True,
+        placeholder="Enter message or upload file...",
+        show_label=False,
+    )
+
+    chat_msg = chat_input.submit(
+        add_message, [chatbot, chat_input], [chatbot, chat_input]
+    )
+    bot_msg = chat_msg.then(
+        bot, [chatbot, response_type], chatbot, api_name="bot_response"
+    )
+    bot_msg.then(lambda: gr.MultimodalTextbox(interactive=True), None, [chat_input])
+
+    chatbot.like(print_like_dislike, None, None)
+
+if __name__ == "__main__":
+    demo.launch()
+
+		    Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Chatbot
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Chatbot.change(fn, ···)  Triggered when the value of the Chatbot changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Chatbot.select(fn, ···)  Event listener for when the user selects or deselects the Chatbot. Uses event data gradio.SelectData to carry value referring to the label of the Chatbot, and selected to refer to state of the Chatbot. See EventData documentation on how to use this event data Chatbot.like(fn, ···)  This listener is triggered when the user likes/dislikes from within the Chatbot. This event has EventData of type gradio.LikeData that carries information, accessible through LikeData.index and LikeData.value. See EventData documentation on how to use this event data.  Event Parameters Parameters ▼     ← Button Checkbox →     Status  
+
+
+
+

@@ -1,0 +1,49 @@
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+Gradio  Docs
+
+
+ Introducing Gradio Clients Watch →    ⚡ Quickstart ✍️ Docs 🎢 Playground 🖼️ Custom Components 🖐 Community    Search Search ⌘K    Components  Model3D    4.41.1main Building Demos InterfaceChatInterfaceTabbedInterfaceBlocksBlocks Layout renderAccordionColumnGroupRowTabComponents IntroductionAnnotatedImageAudioBarPlotButtonChatbotCheckboxCheckboxGroupClearButtonCodeColorPickerDataframeDatasetDateTimeDownloadButtonDropdownDuplicateButtonFileFileExplorerGalleryHighlightedTextHTMLImageImageEditorJSONLabelLinePlotLoginButtonLogoutButtonMarkdownModel3DMultimodalTextboxNumberParamViewerPlotRadioScatterPlotSimpleImageSliderStateTextboxTimerUploadButtonVideoHelpers EventDataDeletedFileDataKeyUpDataLikeDataSelectDataFileDataProgressExamplesDependencyloadmake_waveformonset_static_pathsModals ErrorInfoWarningRoutes mount_gradio_appRequestOther FlaggingThemesNO_RELOAD New to Gradio? Start here: Getting Started See the Release History ← Markdown MultimodalTextbox →  Model3D gradio.Model3D(···) import gradio as gr 
+with gr.Blocks() as demo:
+    gr.Model3D()
+demo.launch() Description Creates a component allows users to upload or view 3D Model files (.obj, .glb, .stl, .gltf, .splat, or .ply).  Behavior As input component: Passes the uploaded file as a str filepath to the function. Your function should accept one of these types: def predict(
+	value: str | None
+)
+	...  As output component: Expects function to return a str or pathlib.Path filepath of type (.obj, .glb, .stl, or .gltf) Your function should return one of these types: def predict(···) -> str | Path | None
+	...	
+	return value Initialization Parameters ▼  Shortcuts Class Interface String Shortcut Initialization gradio.Model3D  "model3d" Uses default values  Event Listeners Description Event listeners allow you to respond to user interactions with the UI
+		components you've defined in a Gradio Blocks app. When a user interacts with
+		an element, such as changing a slider value or uploading an image, a
+		function is called. Supported Event Listeners The Model3D
+		component supports the following event listeners. Each event listener takes the
+		same parameters, which are listed in the
+		Event Parameters table below. Listener Description Model3D.change(fn, ···)  Triggered when the value of the Model3D changes either because of user input (e.g. a user types in a textbox) OR because of a function update (e.g. an image receives a value from the output of an event trigger). See .input() for a listener that is only triggered by user input. Model3D.upload(fn, ···)  This listener is triggered when the user uploads a file into the Model3D. Model3D.edit(fn, ···)  This listener is triggered when the user edits the Model3D (e.g. image) using the built-in editor. Model3D.clear(fn, ···)  This listener is triggered when the user clears the Model3D using the X button for the component.  Event Parameters Parameters ▼    Guides How To Use 3D Model Component   ← Markdown MultimodalTextbox →     Status  
+
+
+
+
