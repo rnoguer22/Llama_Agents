@@ -60,6 +60,11 @@ class Scrap:
                 print('Error al obtener el contenido de la página:', response.status_code)
 
 
-scrapper = Scrap('https://www.gradio.app/docs/gradio/interface')
-urls = scrapper.get_urls()
-scrapper.get_htmls(urls, write=True, save_path='./myRAG/data/')
+
+
+
+if __name__ == '__main__':
+
+    scrapper = Scrap('https://www.gradio.app/docs/gradio/interface')
+    urls = scrapper.get_urls()
+    scrapper.get_htmls(urls, write=True, save_path='./myRAG/data/')
