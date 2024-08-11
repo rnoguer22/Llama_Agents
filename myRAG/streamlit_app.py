@@ -3,11 +3,11 @@ import random
 import streamlit as st
 from dotenv import load_dotenv
 
-from ragbase.chain import ask_question, create_chain
+#from ragbase.chain import ask_question, create_chain
 from ragbase.config import Config
 from ragbase.ingestor import Ingestor
-from ragbase.model import create_llm
-from ragbase.retriever import create_retriever
+#from ragbase.model import create_llm
+#from ragbase.retriever import create_retriever
 from ragbase.uploader import upload_files
 
 
@@ -88,7 +88,7 @@ def show_upload_documents():
             label='Upload the PDF data', type=['pdf'], accept_multiple_files=True
         )
     if not uploaded_files:
-        st.warning('Please upload PDF docuements to continue!')
+        st.warning('Please upload PDF documents to continue!')
         st.stop()
     
     with st.spinner('Analyzing your document(s)...'):
