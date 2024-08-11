@@ -3,11 +3,11 @@ import random
 import streamlit as st
 from dotenv import load_dotenv
 
-#from ragbase.chain import ask_question, create_chain
+from ragbase.chain import ask_question, create_chain
 from ragbase.config import Config
 from ragbase.ingestor import Ingestor
-#from ragbase.model import create_llm
-#from ragbase.retriever import create_retriever
+from ragbase.model import create_llm
+from ragbase.retriever import create_retriever
 from ragbase.uploader import upload_files
 
 
@@ -51,6 +51,15 @@ LOADING_MESSAGES = [
 
 
 
+
+# Esta funcion es la que lo hace casi todo xddd
+@st.cache_resource(show_spinner=True)
+def build_qa_chain(files):
+    file_paths = upload_files(files)
+    vector_store = Ingestor().ingest(file_paths)
+    llm = create_llm()
+    retriever = create_retriever(llm, vector_store=vector_store)
+    return create_chain(llm, retriever)
 
 
 # La respuesta va a ser un async generator, por lo que usamos una funcion asincrona
