@@ -10,6 +10,8 @@ from ragbase.model import create_llm
 from ragbase.retriever import create_retriever
 from ragbase.uploader import upload_files
 
+
+
 load_dotenv()
 
 st.set_page_config(page_title='RAG Llama 3.1', page_icon='🦙')
