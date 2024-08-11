@@ -51,6 +51,8 @@ LOADING_MESSAGES = [
 
 
 
+
+
 # La respuesta va a ser un async generator, por lo que usamos una funcion asincrona
 async def ask_chain(question: str, chain):
     full_response = ''
