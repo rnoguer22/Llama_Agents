@@ -24,7 +24,7 @@ The contextual information is organized with the most relevant source appearing 
 Each source is separated by a horizontal rule (---).
 
 Context:
-{Context}
+{context}
 
 Use markdown formatting where appropiate.
 '''
@@ -88,4 +88,4 @@ async def ask_question(chain: Runnable, question: str, session_id: str):
         if event_type == 'on_retriever_end':
             yield event['data']['output']
         if event_type == 'on_chain_stream':
-            yield event['data']['output'].content
+            yield event['data']['chunk'].content

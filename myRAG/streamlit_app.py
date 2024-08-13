@@ -107,7 +107,7 @@ def show_upload_documents():
 
 # Funcion para mostrar el historial de mensajes
 def show_message_history():
-    for message in st.session_state.meesages:
+    for message in st.session_state.messages:
         role = message['role']
         avatar_path = (
             Config.Path.IMAGES_DIR / 'assistant-avatar.png'

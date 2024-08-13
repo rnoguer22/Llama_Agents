@@ -26,9 +26,9 @@ def create_retriever(
         search_type='similarity', search_kwargs={'k': 5}
     )
     # Si tenemos un reranker lo asignamos al retriever
-    if Config.Retriver.USE_RERANKER:
+    if Config.Retriever.USE_RERANKER:
         retriever = ContextualCompressionRetriever(
-            base_compressor=create_reranker, base_retriever=retriever
+            base_compressor=create_reranker(), base_retriever=retriever
         )
     # Si tenemos un chain filter, tambien se lo asignamos
     if Config.Retriever.USE_CHAIN_FILTER:
