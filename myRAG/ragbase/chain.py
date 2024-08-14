@@ -11,8 +11,8 @@ from langchain_core.runnables.history import RunnableWithMessageHistory
 from langchain_core.tracers.stdout import ConsoleCallbackHandler
 from langchain_core.vectorstores import VectorStoreRetriever
 
-from ragbase.config import Config
-from ragbase.session_history import get_session_history
+from myRAG.ragbase.config import Config
+from myRAG.ragbase.session_history import get_session_history
 
 
 

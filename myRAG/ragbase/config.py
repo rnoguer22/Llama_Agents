@@ -8,7 +8,7 @@ class Config:
     class Path:
         APP_HOME = Path(os.getenv('APP_HOME', Path(__file__).parent.parent))    
         DATABASE_DIR = APP_HOME / 'docs-db'
-        DOCUMENTS_DIR = APP_HOME / 'tmp'
+        DOCUMENTS_DIR = APP_HOME / 'docs'
         IMAGES_DIR = APP_HOME / 'img'
     
     class Database:

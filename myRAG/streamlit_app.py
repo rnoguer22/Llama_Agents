@@ -3,12 +3,12 @@ import random
 import streamlit as st
 from dotenv import load_dotenv
 
-from ragbase.chain import ask_question, create_chain
-from ragbase.config import Config
-from ragbase.ingestor import Ingestor
-from ragbase.model import create_llm
-from ragbase.retriever import create_retriever
-from ragbase.uploader import upload_files
+from myRAG.ragbase.chain import ask_question, create_chain
+from myRAG.ragbase.config import Config
+from myRAG.ragbase.ingestor import Ingestor
+from myRAG.ragbase.model import create_llm
+from myRAG.ragbase.retriever import create_retriever
+from myRAG.ragbase.uploader import upload_files
 
 
 
@@ -79,11 +79,9 @@ class Llama3_RAG:
             st.stop()
 
 
-
-
     # Esta funcion es la que lo hace casi todo xddd
     @st.cache_resource(show_spinner=True)
-    def build_qa_chain(self, files):
+    def build_qa_chain(_self, files):
         file_paths = upload_files(files)
         vector_store = Ingestor().ingest(file_paths)
         llm = create_llm()

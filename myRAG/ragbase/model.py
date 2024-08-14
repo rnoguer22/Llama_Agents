@@ -4,7 +4,7 @@ from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 from langchain_core.language_models import BaseLanguageModel
 from langchain_groq import ChatGroq
 
-from ragbase.config import Config
+from myRAG.ragbase.config import Config
 
 '''
 Archivo para inicializar todos los modelos que vamos a necesitar

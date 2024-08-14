@@ -6,8 +6,8 @@ from langchain_core.language_models import BaseLanguageModel
 from langchain_core.vectorstores import VectorStore, VectorStoreRetriever
 from langchain_qdrant import Qdrant
 
-from ragbase.config import Config
-from ragbase.model import create_embeddings, create_reranker
+from myRAG.ragbase.config import Config
+from myRAG.ragbase.model import create_embeddings, create_reranker
 
 
 
