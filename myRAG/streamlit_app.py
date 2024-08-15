@@ -17,7 +17,7 @@ from myRAG.ragbase.uploader import upload_files
 class Llama3_RAG:
 
     def __init__(self) -> None:    
-        load_dotenv()
+        #load_dotenv()
         self.LOADING_MESSAGES = [
             "Winter is coming... Just a moment...",
             "Daenerys is commanding her dragons... Loading...",
@@ -81,12 +81,12 @@ class Llama3_RAG:
 
     # Esta funcion es la que lo hace casi todo xddd
     @st.cache_resource(show_spinner=True)
-    def build_qa_chain(_self, files):
+    def build_qa_chain(_self, files, api_key):
         file_paths = upload_files(files)
         print('Archivos subidos!')
         vector_store = Ingestor().ingest(file_paths)
         print('Vectores OK!')
-        llm = create_llm()
+        llm = create_llm(groq_api_key=api_key)
         print('LLM bomba!')
         retriever = create_retriever(llm, vector_store=vector_store)
         print('Retriever de salchichon!')
@@ -124,16 +124,20 @@ class Llama3_RAG:
         with holder.container():
             st.header('RagBase')
             st.subheader('Get answers from your documents')
+            groq_api_key = st.text_input('Enter your groq api key here! 👇')
             uploaded_files = st.file_uploader(
                 label='Upload the file(s) data', type=['pdf', 'txt'], accept_multiple_files=True
             )
+        if not groq_api_key:
+            st.warning('Please enter your groq api key to continue!')
+            st.stop()
         if not uploaded_files:
             st.warning('Please upload PDF or .txt document to continue!')
             st.stop()
         
         with st.spinner('Analyzing your document(s)...'):
             holder.empty()
-            return self.build_qa_chain(uploaded_files)
+            return self.build_qa_chain(uploaded_files, groq_api_key)
 
 
     # Funcion para mostrar el historial de mensajes
