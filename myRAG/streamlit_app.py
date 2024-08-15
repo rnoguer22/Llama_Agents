@@ -83,9 +83,13 @@ class Llama3_RAG:
     @st.cache_resource(show_spinner=True)
     def build_qa_chain(_self, files):
         file_paths = upload_files(files)
+        print('Archivos subidos!')
         vector_store = Ingestor().ingest(file_paths)
+        print('Vectores OK!')
         llm = create_llm()
+        print('LLM bomba!')
         retriever = create_retriever(llm, vector_store=vector_store)
+        print('Retriever de salchichon!')
         return create_chain(llm, retriever)
 
 

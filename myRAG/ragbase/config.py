@@ -27,5 +27,5 @@ class Config:
         USE_RERANKER = True
         USE_CHAIN_FILTER = False
     
-    DEBUG = True
+    DEBUG = False
     CONVERSATION_MESSAGES_LIMIT = 30  
