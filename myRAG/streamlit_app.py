@@ -121,10 +121,10 @@ class Llama3_RAG:
             st.header('RagBase')
             st.subheader('Get answers from your documents')
             uploaded_files = st.file_uploader(
-                label='Upload the PDF data', type=['pdf'], accept_multiple_files=True
+                label='Upload the file(s) data', type=['pdf', 'txt'], accept_multiple_files=True
             )
         if not uploaded_files:
-            st.warning('Please upload PDF documents to continue!')
+            st.warning('Please upload PDF or .txt document to continue!')
             st.stop()
         
         with st.spinner('Analyzing your document(s)...'):

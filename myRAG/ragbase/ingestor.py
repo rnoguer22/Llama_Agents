@@ -30,9 +30,15 @@ class Ingestor:
     def ingest(self, doc_paths: List[Path]) -> VectorStore:
         documents = []
         for doc_path in doc_paths:
-            # Obtenemos el texto de los PDFs
-            loaded_documents = PyPDFium2Loader(doc_path).load()
-            document_text = '\n'.join([doc.page_content for doc in loaded_documents])
+            doc_path = str(doc_path)
+            if doc_path.endswith('.pdf'):
+                # Obtenemos el texto de los PDFs
+                loaded_documents = PyPDFium2Loader(doc_path).load()
+                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
+            elif doc_path.endswith('.txt'):
+                # Obtenemos el texto de los txt
+                with open(doc_path, 'r') as loaded_document:
+                    document_text = loaded_document.read()
             documents.extend(
                 # Dividimos el texto en chunks + pequeños para evitar procesar documentos muy grades
                 self.recursive_splitter.split_documents(
