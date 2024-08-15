@@ -21,11 +21,11 @@ class Config:
         REMOTE_LLM = 'llama-3.1-70b-versatile'
         TEMPERATURE = 0.0
         MAX_TOKENS = 8000
-        USE_LOCAL = True
+        USE_LOCAL = False
     
     class Retriever:
         USE_RERANKER = True
         USE_CHAIN_FILTER = False
     
-    DEBUG = False
+    DEBUG = True
     CONVERSATION_MESSAGES_LIMIT = 30  
