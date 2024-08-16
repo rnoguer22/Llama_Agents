@@ -1,5 +1,6 @@
 from pathlib import Path
 from typing import List
+import streamlit as st
 
 from langchain_community.document_loaders import PyPDFium2Loader
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
@@ -35,6 +36,11 @@ class Ingestor:
                 # Obtenemos el texto de los PDFs
                 loaded_documents = PyPDFium2Loader(doc_path).load()
                 document_text = '\n'.join([doc.page_content for doc in loaded_documents])
+                if document_text == '\n':
+                    document_text = 'No se ha podido cargar el texto del su archivo .pdf'
+                    st.text('\n'*5)
+                    st.warning(document_text)
+                    st.stop()
             elif doc_path.endswith('.txt'):
                 # Obtenemos el texto de los txt
                 with open(doc_path, 'r') as loaded_document:

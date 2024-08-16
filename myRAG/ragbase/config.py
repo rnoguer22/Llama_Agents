@@ -19,13 +19,13 @@ class Config:
         RERANKER = 'ms-marco-MiniLM-L-12-v2'
         LOCAL_LLM = 'llama3.1'
         REMOTE_LLM = 'llama-3.1-70b-versatile'
-        TEMPERATURE = 0.0
+        TEMPERATURE = 1
         MAX_TOKENS = 8000
         USE_LOCAL = False
     
     class Retriever:
         USE_RERANKER = True
         USE_CHAIN_FILTER = False
-    
-    DEBUG = True
+
+    DEBUG = False
     CONVERSATION_MESSAGES_LIMIT = 30  

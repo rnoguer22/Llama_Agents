@@ -124,20 +124,29 @@ class Llama3_RAG:
         with holder.container():
             st.header('RagBase')
             st.subheader('Get answers from your documents')
-            groq_api_key = st.text_input('Enter your groq api key here! 👇')
+            if not Config.Model.USE_LOCAL:
+                groq_api_key = st.text_input('Enter your groq api key here! 👇')
             uploaded_files = st.file_uploader(
                 label='Upload the file(s) data', type=['pdf', 'txt'], accept_multiple_files=True
             )
-        if not groq_api_key:
-            st.warning('Please enter your groq api key to continue!')
-            st.stop()
+        # Hacemos uso de excepciones para manejar el input de la groq api key
+        try:
+            if not groq_api_key:
+                st.warning('Please enter your groq api key to continue!')
+                st.stop()
+        except:
+            pass
+
         if not uploaded_files:
             st.warning('Please upload PDF or .txt document to continue!')
             st.stop()
         
         with st.spinner('Analyzing your document(s)...'):
-            holder.empty()
-            return self.build_qa_chain(uploaded_files, groq_api_key)
+            holder.empty()  
+            if not Config.Model.USE_LOCAL:
+                return self.build_qa_chain(files=uploaded_files, api_key=groq_api_key)
+            else:
+                return self.build_qa_chain(files=uploaded_files, api_key='None')
 
 
     # Funcion para mostrar el historial de mensajes
