@@ -37,7 +37,8 @@ class Ingestor:
                 loaded_documents = PyPDFium2Loader(doc_path).load()
                 document_text = '\n'.join([doc.page_content for doc in loaded_documents])
                 if document_text == '\n':
-                    document_text = 'No se ha podido cargar el texto del su archivo .pdf'
+                    document_name = doc_path.split('/')[-1]
+                    document_text = f'No se ha podido cargar el texto del archivo: {document_name}'
                     st.text('\n'*5)
                     st.warning(document_text)
                     st.stop()

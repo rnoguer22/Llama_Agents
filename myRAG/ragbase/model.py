@@ -11,8 +11,8 @@ Archivo para inicializar todos los modelos que vamos a necesitar
 '''
 
 # Funcion para crear el llm en local o con la api de groq, segun especifiquemos en config.py
-def create_llm(groq_api_key: str = None) -> BaseLanguageModel:
-    if Config.Model.USE_LOCAL:
+def create_llm(groq_api_key: str = '') -> BaseLanguageModel:
+    if not groq_api_key:
         return ChatOllama(
             model=Config.Model.LOCAL_LLM,
             temperature=Config.Model.TEMPERATURE,
