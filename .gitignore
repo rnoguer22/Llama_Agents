@@ -1,3 +1,4 @@
 .env
-./myRAG/docs/
-./myRAG/docs-db/
+.streamlit/
+myRAG/docs/
+myRAG/docs-db/
