@@ -2,6 +2,7 @@ import asyncio
 import random
 import streamlit as st
 from dotenv import load_dotenv
+import os
 
 from myRAG.ragbase.chain import ask_question, create_chain
 from myRAG.ragbase.config import Config
@@ -19,7 +20,7 @@ from langchain_community.chat_models import ChatOllama
 class Llama3_RAG:
 
     def __init__(self) -> None:    
-        #load_dotenv()
+        load_dotenv()
         self.LOADING_MESSAGES = [
             "Winter is coming... Just a moment...",
             "Daenerys is commanding her dragons... Loading...",
@@ -83,10 +84,11 @@ class Llama3_RAG:
 
     # Esta funcion es la que lo hace casi todo xddd
     @st.cache_resource(show_spinner=True)
-    def build_qa_chain(_self, files, api_key: str = ''):
+    def build_qa_chain(_self, files):
+        print(os.getenv('GROQ_API_KEY'))
         file_paths = upload_files(files)
         vector_store = Ingestor().ingest(file_paths)
-        llm = create_llm(groq_api_key=api_key)
+        llm = create_llm()
         retriever = create_retriever(llm, vector_store=vector_store)
         return create_chain(llm, retriever)
 
@@ -131,15 +133,15 @@ class Llama3_RAG:
             st.header('RagBase')
             st.subheader('Get answers from your documents')
             # Si detectamos el modelo de lenguaje descargado en local, no tenemos que proporcionar la api de groq
-            ollama = ChatOllama(model=Config.Model.LOCAL_LLM)
+            '''ollama = ChatOllama(model=Config.Model.LOCAL_LLM)
             if not str(ollama).startswith('model'):
-                groq_api_key = st.text_input('Enter your groq api key here! 👇')
+                groq_api_key = st.text_input('Enter your groq api key here! 👇')'''
 
             uploaded_files = st.file_uploader(
                 label='Upload the file(s) data', type=['pdf', 'txt'], accept_multiple_files=True
             )
         # Si no usamos el modelo local, tenemos que introducir la api de groq. Para ello mostramos una advertencia
-        try:
+        '''try:
             if not groq_api_key:
                 st.warning('Please enter your groq api key to continue!')
                 st.stop()
@@ -148,7 +150,7 @@ class Llama3_RAG:
                     st.warning('Please provide a valid groq api key!')
                     st.stop()
         except:
-            pass
+            pass'''
 
         if not uploaded_files:
             st.warning('Please upload PDF or .txt document to continue!')
@@ -156,10 +158,10 @@ class Llama3_RAG:
         
         with st.spinner('Analyzing your document(s)...'):
             holder.empty()
-            try:
+            '''try:
                 return self.build_qa_chain(files=uploaded_files, api_key=groq_api_key)
-            except:
-                return self.build_qa_chain(files=uploaded_files)
+            except:'''
+            return self.build_qa_chain(files=uploaded_files)
 
 
     # Funcion para mostrar el historial de mensajes
