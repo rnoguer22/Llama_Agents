@@ -2,7 +2,6 @@ import asyncio
 import random
 import streamlit as st
 from dotenv import load_dotenv
-import os
 
 from myRAG.ragbase.chain import ask_question, create_chain
 from myRAG.ragbase.config import Config
@@ -10,8 +9,6 @@ from myRAG.ragbase.ingestor import Ingestor
 from myRAG.ragbase.model import create_llm
 from myRAG.ragbase.retriever import create_retriever
 from myRAG.ragbase.uploader import upload_files
-
-from langchain_community.chat_models import ChatOllama
 
 
 
@@ -85,12 +82,13 @@ class Llama3_RAG:
     # Esta funcion es la que lo hace casi todo xddd
     @st.cache_resource(show_spinner=True)
     def build_qa_chain(_self, files):
-        print(os.getenv('GROQ_API_KEY'))
         file_paths = upload_files(files)
         vector_store = Ingestor().ingest(file_paths)
-        llm = create_llm()
-        retriever = create_retriever(llm, vector_store=vector_store)
-        return create_chain(llm, retriever)
+        if vector_store is not None:
+            llm = create_llm()
+            retriever = create_retriever(llm, vector_store=vector_store)
+            return create_chain(llm, retriever)
+        return None
 
 
     # La respuesta va a ser un async generator, por lo que usamos una funcion asincrona
@@ -119,38 +117,14 @@ class Llama3_RAG:
 
 
     # Funcion para subir los archivos
-    def show_upload_documents(self):
-        # Funcion para verificar si la api key de groq cumple con el patron deseado
-        def verify_groq_api_key(groq_api_key: str) -> bool:
-            patterns = {'groq': 56, 'gsk_': 56, 'wgdyb3fy': 60}
-            for pattern, lenght in patterns.items():
-                if groq_api_key.startswith(pattern) and len(groq_api_key) == lenght:
-                    return True
-            return False
-
+    def show_upload_documents(self, generated_key: int = 0):
         holder = st.empty()
         with holder.container():
             st.header('RagBase')
             st.subheader('Get answers from your documents')
-            # Si detectamos el modelo de lenguaje descargado en local, no tenemos que proporcionar la api de groq
-            '''ollama = ChatOllama(model=Config.Model.LOCAL_LLM)
-            if not str(ollama).startswith('model'):
-                groq_api_key = st.text_input('Enter your groq api key here! 👇')'''
-
             uploaded_files = st.file_uploader(
-                label='Upload the file(s) data', type=['pdf', 'txt'], accept_multiple_files=True
+                label='Upload the file(s) data', type=['pdf', 'txt'], accept_multiple_files=True, key=generated_key
             )
-        # Si no usamos el modelo local, tenemos que introducir la api de groq. Para ello mostramos una advertencia
-        '''try:
-            if not groq_api_key:
-                st.warning('Please enter your groq api key to continue!')
-                st.stop()
-            else:
-                if not verify_groq_api_key(groq_api_key=groq_api_key):
-                    st.warning('Please provide a valid groq api key!')
-                    st.stop()
-        except:
-            pass'''
 
         if not uploaded_files:
             st.warning('Please upload PDF or .txt document to continue!')
@@ -158,9 +132,6 @@ class Llama3_RAG:
         
         with st.spinner('Analyzing your document(s)...'):
             holder.empty()
-            '''try:
-                return self.build_qa_chain(files=uploaded_files, api_key=groq_api_key)
-            except:'''
             return self.build_qa_chain(files=uploaded_files)
 
 

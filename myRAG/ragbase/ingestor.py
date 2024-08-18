@@ -1,6 +1,7 @@
 from pathlib import Path
 from typing import List
 import streamlit as st
+from time import sleep
 
 from langchain_community.document_loaders import PyPDFium2Loader
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
@@ -39,9 +40,10 @@ class Ingestor:
                 if document_text == '\n':
                     document_name = doc_path.split('/')[-1]
                     document_text = f'No se ha podido cargar el texto del archivo: {document_name}'
-                    st.text('\n'*5)
-                    st.warning(document_text)
-                    st.stop()
+                    st.warning(document_text, icon='🚨')
+                    st.success('Reload the page to continue')
+                    return None 
+                    
             elif doc_path.endswith('.txt'):
                 # Obtenemos el texto de los txt
                 with open(doc_path, 'r') as loaded_document:
