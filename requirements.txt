@@ -18,3 +18,5 @@ pypdfium2==4.30.0
 python-dotenv==1.0.1
 qdrant-client==1.10.1
 streamlit==1.36.0
+markdown-it-py==3.0.0
+jq==1.8.0

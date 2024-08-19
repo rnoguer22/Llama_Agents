@@ -1,9 +1,14 @@
 from pathlib import Path
 from typing import List
 import streamlit as st
-from time import sleep
 
+import json
 from langchain_community.document_loaders import PyPDFium2Loader
+from langchain_community.document_loaders.csv_loader import CSVLoader
+from langchain_community.document_loaders import UnstructuredMarkdownLoader
+from langchain_community.document_loaders import UnstructuredHTMLLoader
+from langchain_community.document_loaders import JSONLoader
+
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 from langchain_core.vectorstores import VectorStore
 from langchain_experimental.text_splitter import SemanticChunker
@@ -13,7 +18,7 @@ from langchain_text_splitters import RecursiveCharacterTextSplitter
 from myRAG.ragbase.config import Config
 
 
-# El objetivo de esta clase es extraer el texto de los PDFs, separarlos en chunks + pequeños
+# El objetivo de esta clase es extraer el texto de los archivos, separarlos en chunks + pequeños
 # y utilizar un embedding para guardarlos en la vector database
 class Ingestor:
 
@@ -33,21 +38,43 @@ class Ingestor:
         documents = []
         for doc_path in doc_paths:
             doc_path = str(doc_path)
+
             if doc_path.endswith('.pdf'):
                 # Obtenemos el texto de los PDFs
                 loaded_documents = PyPDFium2Loader(doc_path).load()
                 document_text = '\n'.join([doc.page_content for doc in loaded_documents])
-                if document_text == '\n':
-                    document_name = doc_path.split('/')[-1]
-                    document_text = f'No se ha podido cargar el texto del archivo: {document_name}'
-                    st.warning(document_text, icon='🚨')
-                    st.success('Reload the page to continue')
-                    return None 
                     
             elif doc_path.endswith('.txt'):
                 # Obtenemos el texto de los txt
                 with open(doc_path, 'r') as loaded_document:
                     document_text = loaded_document.read()
+            
+            elif doc_path.endswith('.csv'):
+                loaded_documents = CSVLoader(doc_path).load()
+
+            elif doc_path.endswith('.json'):
+                loaded_documents = JSONLoader(doc_path, jq_schema='.', text_content=False).load()
+                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
+
+            elif doc_path.endswith('.md'):
+                loaded_documents = UnstructuredMarkdownLoader(doc_path).load()
+                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
+
+            elif doc_path.endswith('.html'):
+                loaded_documents = UnstructuredHTMLLoader(doc_path).load()
+                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
+            
+            else:
+                # Aqui gestionaremos los archivos que no se puedan leer con langchain para poder intentar leerlos
+                pass
+            
+            if document_text == '\n' or document_text == '':
+                    document_name = doc_path.split('/')[-1]
+                    document_text = f'No se ha podido cargar el texto del archivo: {document_name}'
+                    st.error(document_text, icon='🚨')
+                    st.warning('Reload the page to continue')
+                    return None 
+            
             documents.extend(
                 # Dividimos el texto en chunks + pequeños para evitar procesar documentos muy grades
                 self.recursive_splitter.split_documents(
