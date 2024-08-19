@@ -2,12 +2,14 @@ from pathlib import Path
 from typing import List
 import streamlit as st
 
-import json
 from langchain_community.document_loaders import PyPDFium2Loader
 from langchain_community.document_loaders.csv_loader import CSVLoader
 from langchain_community.document_loaders import UnstructuredMarkdownLoader
 from langchain_community.document_loaders import UnstructuredHTMLLoader
 from langchain_community.document_loaders import JSONLoader
+from langchain_community.document_loaders import Docx2txtLoader
+from langchain_community.document_loaders import UnstructuredExcelLoader
+from langchain_community.document_loaders import UnstructuredPowerPointLoader
 
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 from langchain_core.vectorstores import VectorStore
@@ -63,7 +65,19 @@ class Ingestor:
             elif doc_path.endswith('.html'):
                 loaded_documents = UnstructuredHTMLLoader(doc_path).load()
                 document_text = '\n'.join([doc.page_content for doc in loaded_documents])
+
+            elif doc_path.endswith('docx'):
+                loaded_documents = Docx2txtLoader(doc_path).load()
+                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
             
+            elif doc_path.endswith(('xlsx', 'xls')):
+                loaded_documents = UnstructuredExcelLoader(doc_path, mode="elements").load()
+                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
+            
+            elif doc_path.endswith('pptx'):
+                loaded_documents = UnstructuredPowerPointLoader(doc_path).load()
+                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
+
             else:
                 # Aqui gestionaremos los archivos que no se puedan leer con langchain para poder intentar leerlos
                 pass
