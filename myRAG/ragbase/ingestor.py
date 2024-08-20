@@ -45,7 +45,6 @@ class Ingestor:
                 # Obtenemos el texto de los PDFs
                 loaded_documents = PyPDFium2Loader(doc_path, extract_images=True).load()
                 document_text = '\n'.join([doc.page_content for doc in loaded_documents])
-                print(document_text)
                     
             elif doc_path.endswith('.txt'):
                 # Obtenemos el texto de los txt
@@ -54,6 +53,7 @@ class Ingestor:
             
             elif doc_path.endswith('.csv'):
                 loaded_documents = CSVLoader(doc_path).load()
+                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
 
             elif doc_path.endswith('.json'):
                 loaded_documents = JSONLoader(doc_path, jq_schema='.', text_content=False).load()
