@@ -82,7 +82,6 @@ class Llama3_RAG:
     # Esta funcion es la que lo hace casi todo xddd
     @st.cache_resource(show_spinner=True)
     def build_qa_chain(_self, files):
-        print(files)
         file_paths = upload_files(files)
         vector_store = Ingestor().ingest(file_paths)
         if vector_store is not None:
@@ -133,6 +132,12 @@ class Llama3_RAG:
         
         with st.spinner('Analyzing your document(s)...'):
             holder.empty()
+            for file in uploaded_files:
+                print('\n')
+                print(file)
+                print(file.name)
+                print(file.getvalue())
+                print('\n')
             return self.build_qa_chain(files=uploaded_files)
 
 
