@@ -9,6 +9,7 @@ from myRAG.ragbase.ingestor import Ingestor
 from myRAG.ragbase.model import create_llm
 from myRAG.ragbase.retriever import create_retriever
 from myRAG.ragbase.uploader import upload_files
+from myRAG.gradio_model import Gradio_Model, UploadedGradioFile
 
 
 
@@ -117,28 +118,34 @@ class Llama3_RAG:
 
 
     # Funcion para subir los archivos
-    def show_upload_documents(self, generated_key: int = 0):
-        holder = st.empty()
-        with holder.container():
-            st.header('RagBase')
-            st.subheader('Get answers from your documents')
-            uploaded_files = st.file_uploader(
-                label='Upload the file(s) data', type=['pdf', 'txt', 'docx', 'xlsx', 'xls', 'pptx', 'csv', 'json', 'md'], accept_multiple_files=True, key=generated_key
-            )
+    def show_upload_documents(self, generated_key: int = 0, launch_gradio_docs: bool = False):
+        if launch_gradio_docs:
+            gradio_try = Gradio_Model()
+            gradio_files = gradio_try.get_files()
+            print(gradio_files)
+            return self.build_qa_chain(files=gradio_files)
+        else:
+            holder = st.empty()
+            with holder.container():
+                st.header('RagBase')
+                st.subheader('Get answers from your documents')
+                uploaded_files = st.file_uploader(
+                    label='Upload the file(s) data', type=['pdf', 'txt', 'docx', 'xlsx', 'xls', 'pptx', 'csv', 'json', 'md'], accept_multiple_files=True, key=generated_key
+                )
 
-        if not uploaded_files:
-            st.warning('Please upload PDF or .txt document to continue!')
-            st.stop()
-        
-        with st.spinner('Analyzing your document(s)...'):
-            holder.empty()
-            for file in uploaded_files:
-                print('\n')
-                print(file)
-                print(file.name)
-                print(file.getvalue())
-                print('\n')
-            return self.build_qa_chain(files=uploaded_files)
+            if not uploaded_files:
+                st.warning('Please upload PDF or .txt document to continue!')
+                st.stop()
+            
+            with st.spinner('Analyzing your document(s)...'):
+                holder.empty()
+                for file in uploaded_files:
+                    print('\n')
+                    print(file)
+                    print(file.name)
+                    print(file.getvalue())
+                    print('\n')
+                return self.build_qa_chain(files=uploaded_files)
 
 
     # Funcion para mostrar el historial de mensajes

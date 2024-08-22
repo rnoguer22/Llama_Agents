@@ -1,13 +1,6 @@
 import os
 from dotenv import load_dotenv
 
-from ragbase.config import Config
-from langchain_groq import ChatGroq
-from langchain.chains import LLMChain
-from langchain_core.prompts import PromptTemplate
-
-
-
 
 
 class Gradio_Model:
@@ -20,40 +13,22 @@ class Gradio_Model:
     # Funcion para obtener el contenido de los archivos scrapeados de gradio
     def get_files(self):
         files_data = []
-        for file in os.listdir(self.files_dir):
-            file_path = os.path.join(self.files_dir, file)
-            with open(file_path, 'r', encoding='utf-8') as opened_file:
-                file_content = opened_file.read()
-                files_data.append(file_content)
-        return '\n'.join(files_data)
+        for file_name in os.listdir(self.files_dir):
+            uploaded_file = UploadedGradioFile(file_name)
+            files_data.append(uploaded_file)
+        return files_data
     
 
-    def ask_question(self, file_content):
-        llm = ChatGroq(
-            temperature=Config.Model.TEMPERATURE,
-            model_name=Config.Model.REMOTE_LLM,
-            max_tokens=Config.Model.MAX_TOKENS
-        )
 
-        prompt = PromptTemplate(
-            input_variables=["content", "question"],
-            template="Based on the following content:\n\n{content}\n\nAnswer the following question:\n\n{question}\n"
-        )
+class UploadedGradioFile(Gradio_Model):
 
-        chain = LLMChain(llm=llm, prompt=prompt)
-
-        question = str(input('Ask your question here: '))
-        
-        answer = chain.run(content=file_content, question=question)
-        
-        print("Question:", question)
-        print("Answer:", answer)
-        print("\n")
+    def __init__(self, name) -> None:
+        super().__init__()
+        self.name = name
 
 
-
-
-
-gradio_try = Gradio_Model()
-file_content = gradio_try.get_files()
-gradio_try.ask_question(file_content)
+    def getvalue(self):
+        file_path = os.path.join(self.files_dir, self.name)
+        with open(file_path, 'rb') as opened_file:
+            file_content = opened_file.read()
+        return file_content
