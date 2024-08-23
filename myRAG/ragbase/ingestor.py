@@ -76,8 +76,12 @@ class Ingestor:
                     # Si obtenemos error, es que no podemos leer el archivo
                     return show_error(f'El archivo {document_name} contiene una extension no soportada.')
             
-            # Obtenemos el texto de los archivos subidos por el usuario
-            document_text = '\n'.join([doc.page_content for doc in loaded_documents])
+            try:
+                # Obtenemos el texto de los archivos subidos por el usuario
+                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
+            except:
+                pass
+            
             if document_text == '\n' or document_text == '':
                     return show_error(f'No se ha podido cargar el texto del archivo {document_name}')
 
