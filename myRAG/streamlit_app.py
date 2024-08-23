@@ -123,7 +123,7 @@ class Llama3_RAG:
             st.header('RagBase')
             st.subheader('Get answers from your documents')
             uploaded_files = st.file_uploader(
-                label='Upload the file(s) data', type=['pdf', 'txt', 'docx', 'xlsx', 'xls', 'pptx', 'csv', 'json', 'md'], accept_multiple_files=True, key=generated_key
+                label='Upload the file(s) data', accept_multiple_files=True, key=generated_key
             )
 
         if not uploaded_files:

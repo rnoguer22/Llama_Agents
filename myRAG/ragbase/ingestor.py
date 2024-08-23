@@ -10,6 +10,7 @@ from langchain_community.document_loaders import JSONLoader
 from langchain_community.document_loaders import Docx2txtLoader
 from langchain_community.document_loaders import UnstructuredExcelLoader
 from langchain_community.document_loaders import UnstructuredPowerPointLoader
+from langchain_community.document_loaders.image import UnstructuredImageLoader
 
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 from langchain_core.vectorstores import VectorStore
@@ -37,59 +38,49 @@ class Ingestor:
 
 
     def ingest(self, doc_paths: List[Path]) -> VectorStore:
+        #Funcion para mostrar mensajes de error
+        def show_error(message_error):
+            st.error(message_error, icon='🚨')
+            st.warning('Reload the page to continue')
+            return None
+
         documents = []
         for doc_path in doc_paths:
             doc_path = str(doc_path)
-
+            document_name = doc_path.split('/')[-1]
             if doc_path.endswith('.pdf'):
                 # Obtenemos el texto de los PDFs
                 loaded_documents = PyPDFium2Loader(doc_path, extract_images=True).load()
-                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
-                    
-            elif doc_path.endswith('.txt'):
-                # Obtenemos el texto de los txt
-                with open(doc_path, 'r') as loaded_document:
-                    document_text = loaded_document.read()
-            
             elif doc_path.endswith('.csv'):
                 loaded_documents = CSVLoader(doc_path).load()
-                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
-
             elif doc_path.endswith('.json'):
                 loaded_documents = JSONLoader(doc_path, jq_schema='.', text_content=False).load()
-                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
-
             elif doc_path.endswith('.md'):
                 loaded_documents = UnstructuredMarkdownLoader(doc_path).load()
-                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
-
             elif doc_path.endswith('.html'):
                 loaded_documents = UnstructuredHTMLLoader(doc_path).load()
-                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
-
             elif doc_path.endswith('docx'):
                 loaded_documents = Docx2txtLoader(doc_path).load()
-                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
-            
             elif doc_path.endswith(('xlsx', 'xls')):
                 loaded_documents = UnstructuredExcelLoader(doc_path, mode="elements").load()
-                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
-            
             elif doc_path.endswith('pptx'):
                 loaded_documents = UnstructuredPowerPointLoader(doc_path).load()
-                document_text = '\n'.join([doc.page_content for doc in loaded_documents])
-
+            elif doc_path.endswith((".jpeg", ".jpg", ".png", ".gif", ".bmp", ".tiff", ".tif", ".webp", ".svg", ".heif", ".heic", ".psd", ".ico", ".eps")):
+                return show_error(f'No se ha podido cargar el texto del archivo {document_name}; No se permiten imagénes!!!')
             else:
-                # Aqui gestionaremos los archivos que no se puedan leer con langchain para poder intentar leerlos
-                pass
+                # Las demas extensiones de archivos, las intentamos leer sin langchain (archivos de python, java, etc.)
+                try:
+                    with open(doc_path, 'r') as loaded_document:
+                        document_text = loaded_document.read()
+                except:
+                    # Si obtenemos error, es que no podemos leer el archivo
+                    return show_error(f'El archivo {document_name} contiene una extension no soportada.')
             
+            # Obtenemos el texto de los archivos subidos por el usuario
+            document_text = '\n'.join([doc.page_content for doc in loaded_documents])
             if document_text == '\n' or document_text == '':
-                    document_name = doc_path.split('/')[-1]
-                    document_text = f'No se ha podido cargar el texto del archivo: {document_name}'
-                    st.error(document_text, icon='🚨')
-                    st.warning('Reload the page to continue')
-                    return None 
-            
+                    return show_error(f'No se ha podido cargar el texto del archivo {document_name}')
+
             documents.extend(
                 # Dividimos el texto en chunks + pequeños para evitar procesar documentos muy grades
                 self.recursive_splitter.split_documents(
