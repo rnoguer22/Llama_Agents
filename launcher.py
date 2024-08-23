@@ -9,8 +9,8 @@ class Launcher:
         self.rag.set_streamlit_config()
 
 
-    def launch_main(self, error_id_key: int = 0, launch_gradio_docs: bool = False):
-        chain = self.rag.show_upload_documents(error_id_key, launch_gradio_docs=launch_gradio_docs)
+    def launch_main(self, error_id_key: int = 0):
+        chain = self.rag.show_upload_documents(error_id_key)
         if chain is not None:
             self.rag.show_message_history() 
             self.rag.show_chat_input(chain)
@@ -27,6 +27,6 @@ class Launcher:
     def launch(self):
         pg = st.navigation([    
             st.Page(self.launch_main, title="Document reader", icon="🔥"),
-            st.Page(self.launch_main(launch_gradio_docs=True), title="Gradio page", icon=":material/favorite:"),
+            st.Page(self.launch_gradio, title="Gradio page", icon=":material/favorite:"),
             ])
         pg.run()
