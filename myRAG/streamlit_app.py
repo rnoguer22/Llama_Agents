@@ -120,14 +120,16 @@ class Llama3_RAG:
     def show_upload_documents(self, generated_key: int = 0):
         holder = st.empty()
         with holder.container():
-            st.header('RagBase')
+            st.header('RAG using Llama 3.1')
             st.subheader('Get answers from your documents')
+            st.text('Upload files and ask questions about the content of your uploaded files!!!')
+            st.markdown('[Github repo](https://github.com/rnoguer22/Llama_Agents)')
             uploaded_files = st.file_uploader(
                 label='Upload the file(s) data', accept_multiple_files=True, key=generated_key
             )
 
         if not uploaded_files:
-            st.warning('Please upload PDF or .txt document to continue!')
+            st.warning('Please upload your documents to continue!')
             st.stop()
         
         with st.spinner('Analyzing your document(s)...'):
