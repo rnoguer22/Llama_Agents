@@ -10,7 +10,6 @@ from langchain_community.document_loaders import JSONLoader
 from langchain_community.document_loaders import Docx2txtLoader
 from langchain_community.document_loaders import UnstructuredExcelLoader
 from langchain_community.document_loaders import UnstructuredPowerPointLoader
-from langchain_community.document_loaders.image import UnstructuredImageLoader
 
 from langchain_community.embeddings.fastembed import FastEmbedEmbeddings
 from langchain_core.vectorstores import VectorStore
@@ -50,7 +49,7 @@ class Ingestor:
             document_name = doc_path.split('/')[-1]
             if doc_path.endswith('.pdf'):
                 # Obtenemos el texto de los PDFs
-                loaded_documents = PyPDFium2Loader(doc_path, extract_images=True).load()
+                loaded_documents = PyPDFium2Loader(doc_path).load()
             elif doc_path.endswith('.csv'):
                 loaded_documents = CSVLoader(doc_path).load()
             elif doc_path.endswith('.json'):
