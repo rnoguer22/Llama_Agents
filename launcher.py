@@ -20,13 +20,17 @@ class Launcher:
             self.launch(error_id_key=error_id_key)
 
 
-    def launch_gradio(self):
-        st.title("Second page")
+    def launch_web_scrapper(self):
+        st.title("Web Scrapper")
+        st.text('Provide a valid URL to scrape and to ask questions:')
+        url = st.text_input('Enter the website URL to scrape')
+        if st.button('Scrape URL'):
+            pass
     
 
     def launch(self):
         pg = st.navigation([    
             st.Page(self.launch_main, title="Document reader", icon="🔥"),
-            st.Page(self.launch_gradio, title="Gradio page", icon=":material/favorite:"),
+            st.Page(self.launch_web_scrapper, title="Web scrapper URL", icon=":material/favorite:"),
             ])
         pg.run()

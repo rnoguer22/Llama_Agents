@@ -132,12 +132,6 @@ class Llama3_RAG:
             
         with st.spinner('Analyzing your document(s)...'):
             holder.empty()
-            for file in uploaded_files:
-                print('\n')
-                print(file)
-                print(file.name)
-                print(file.getvalue())
-                print('\n')
             return self.build_qa_chain(files=uploaded_files)
 
 
