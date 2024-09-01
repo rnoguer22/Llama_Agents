@@ -1,6 +1,7 @@
 from time import sleep
 import streamlit as st
 from myRAG.streamlit_app import Llama3_RAG
+from myRAG.scrapper.scrape import scrape_website, split_chunks
 
 class Launcher:
 
@@ -25,7 +26,16 @@ class Launcher:
         st.text('Provide a valid URL to scrape and to ask questions:')
         url = st.text_input('Enter the website URL to scrape')
         if st.button('Scrape URL'):
-            pass
+            with st.spinner(f'Scrapping {url}...'):
+                sleep(1)
+                html = scrape_website(url)
+                if html:
+                    st.session_state.dom_content = html
+                    with st.expander('View the URL content'):
+                        st.text(html)
+                else:
+                    st.error(f'Could not scrape the given URL')
+                    st.warning('Please reload the page to continue')
     
 
     def launch(self):
