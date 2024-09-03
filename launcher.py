@@ -2,6 +2,7 @@ from time import sleep
 import streamlit as st
 from myRAG.streamlit_app import Llama3_RAG
 from myRAG.scrapper.scrape import scrape_website, split_chunks
+from myRAG.scrapper.llm_parser import parse_with_ollama
 
 class Launcher:
 
@@ -25,7 +26,9 @@ class Launcher:
         st.title("Web Scrapper")
         st.text('Provide a valid URL to scrape and to ask questions:')
         url = st.text_input('Enter the website URL to scrape')
-        if st.button('Scrape URL'):
+        scrape_button = st.button('Scrape URL')
+        print(scrape_button)
+        if scrape_button:
             with st.spinner(f'Scrapping {url}...'):
                 sleep(1)
                 html = scrape_website(url)
@@ -33,6 +36,19 @@ class Launcher:
                     st.session_state.dom_content = html
                     with st.expander('View the URL content'):
                         st.text(html)
+                    
+                    if 'dom_content' in st.session_state:
+                        parse_description = st.text_area('Describe what you want to parse')
+                        parse_button = st.button('Parse content')
+                        print(parse_button)
+                        if parse_button:
+                            print('bomba')
+                            st.write('Parsing the content...')
+                            dom_chunks = split_chunks(html)
+                            result = parse_with_ollama(dom_chunks, parse_description)
+                            print(result)
+                            st.write(result)
+                    
                 else:
                     st.error(f'Could not scrape the given URL')
                     st.warning('Please reload the page to continue')
