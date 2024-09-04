@@ -27,7 +27,7 @@ class Launcher:
         st.text('Provide a valid URL to scrape and to ask questions:')
         url = st.text_input('Enter the website URL to scrape')
         scrape_button = st.button('Scrape URL')
-        print(scrape_button)
+
         if scrape_button:
             with st.spinner(f'Scrapping {url}...'):
                 sleep(1)
@@ -36,24 +36,21 @@ class Launcher:
                     st.session_state.dom_content = html
                     with st.expander('View the URL content'):
                         st.text(html)
-                    
-                    if 'dom_content' in st.session_state:
-                        parse_description = st.text_area('Describe what you want to parse')
-                        parse_button = st.button('Parse content')
-                        print(parse_button)
-                        if parse_button:
-                            print('bomba')
-                            st.write('Parsing the content...')
-                            dom_chunks = split_chunks(html)
-                            result = parse_with_ollama(dom_chunks, parse_description)
-                            print(result)
-                            st.write(result)
-                    
                 else:
                     st.error(f'Could not scrape the given URL')
                     st.warning('Please reload the page to continue')
-    
+                    st.stop()
 
+        if 'dom_content' in st.session_state:
+            parse_description = st.text_area('Describe what you want to parse')
+            parse_button = st.button('Parse content')
+            if parse_button:
+                with st.spinner('Parsing the content...'):
+                    dom_chunks = split_chunks(st.session_state.dom_content)
+                    result = parse_with_ollama(dom_chunks, parse_description)
+                    st.write(result)
+
+                
     def launch(self):
         pg = st.navigation([    
             st.Page(self.launch_main, title="Document reader", icon="🔥"),
