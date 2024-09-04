@@ -23,6 +23,7 @@ class Launcher:
 
 
     def launch_web_scrapper(self):
+        # Ahora estamos usando ssh para subir los commits
         st.title("Web Scrapper")
         st.text('Provide a valid URL to scrape and to ask questions:')
         url = st.text_input('Enter the website URL to scrape')
