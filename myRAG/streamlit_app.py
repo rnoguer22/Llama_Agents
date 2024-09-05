@@ -10,6 +10,8 @@ from myRAG.ragbase.model import create_llm
 from myRAG.ragbase.retriever import create_retriever
 from myRAG.ragbase.uploader import upload_files
 
+from myRAG.scrapper.scrape import ScrappedFile
+
 
 
 
@@ -83,7 +85,8 @@ class Llama3_RAG:
     @st.cache_resource(show_spinner=True)
     def build_qa_chain(_self, files):
         print('\n', files)
-        file_paths = upload_files(files)
+        scrape = [ScrappedFile('https://www.techwithtim.net/')]
+        file_paths = upload_files(scrape)
         print('\n', file_paths)
         vector_store = Ingestor().ingest(file_paths)
         if vector_store is not None:

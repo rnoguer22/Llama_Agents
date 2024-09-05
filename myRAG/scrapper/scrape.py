@@ -1,12 +1,13 @@
 from bs4 import BeautifulSoup
 import requests
 import os
-import streamlit as st
+
 
 
 class ScrappedFile:
 
     def __init__(self, path) -> None:
+        self.path = path
         self.name = self.get_name(path)
 
 
@@ -20,10 +21,10 @@ class ScrappedFile:
 
 
     #Metodo para obtener el HTML de la web
-    def scrape_website(url, write: bool = False, save_path: str = './'):
+    def getvalue(self):
         try:
             # Realizar una solicitud GET para obtener el HTML de la página
-            response = requests.get(url)
+            response = requests.get(self.path)
         except: 
             return None
 
@@ -36,21 +37,11 @@ class ScrappedFile:
             # Obtenemos el texto visible de la pagina web
             visible_text = soup.get_text(separator='\n')
 
-            if write:
-                # Imprimir el contenido del cuerpo de la página
-                if not os.path.exists(save_path):
-                    os.makedirs(save_path)
-                    print(f'Carpeta {save_path} creada correctamente')
-                file_path = f'{save_path}/{url}.txt'
-                with open(file_path, 'w', encoding='utf-8') as file:
-                    file.write(visible_text)
-                print(file_path, ' downloaded successfully')
-
             # Quitamos lineas en blanco innecesarias del contenido de la pagina
             cleaned_text = '\n'.join(
                 line.strip() for line in visible_text.splitlines() if line.strip()
             )
-            return cleaned_text
+            return cleaned_text.encode('utf-8')
 
 
     # Metodo para separar el contenido de la web en chunks + pequeños

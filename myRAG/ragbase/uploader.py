@@ -3,7 +3,7 @@ from pathlib import Path
 from typing import List, Union
 
 from streamlit.runtime.uploaded_file_manager import UploadedFile
-from myRAG.scrapper.scrapped_file import ScrappedFile
+from myRAG.scrapper.scrape import ScrappedFile
 
 from myRAG.ragbase.config import Config
 
