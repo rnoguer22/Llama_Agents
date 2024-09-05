@@ -1,15 +1,16 @@
 import shutil
 from pathlib import Path
-from typing import List
+from typing import List, Union
 
 from streamlit.runtime.uploaded_file_manager import UploadedFile
+from myRAG.scrapper.scrapped_file import ScrappedFile
 
 from myRAG.ragbase.config import Config
 
 
 
 def upload_files(
-    files: List[UploadedFile], remove_old_files: bool = True
+    files: List[Union[UploadedFile, ScrappedFile]], remove_old_files: bool = True
     ) -> List[Path]:
 
     if remove_old_files:

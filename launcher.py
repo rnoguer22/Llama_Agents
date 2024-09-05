@@ -26,13 +26,14 @@ class Launcher:
         # Ahora estamos usando ssh para subir los commits
         st.title("Web Scrapper")
         st.text('Provide a valid URL to scrape and to ask questions:')
-        url = st.text_input('Enter the website URL to scrape')
+        url = st.text_input('Enter the website URL to scrape', value='https://www.techwithtim.net/')
         scrape_button = st.button('Scrape URL')
 
         if scrape_button:
             with st.spinner(f'Scrapping {url}...'):
                 sleep(1)
                 html = scrape_website(url)
+                print(html)
                 if html:
                     st.session_state.dom_content = html
                     with st.expander('View the URL content'):

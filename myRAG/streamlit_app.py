@@ -87,6 +87,7 @@ class Llama3_RAG:
         print('\n', file_paths)
         vector_store = Ingestor().ingest(file_paths)
         if vector_store is not None:
+            print('\n', vector_store)
             llm = create_llm()
             retriever = create_retriever(llm, vector_store=vector_store)
             return create_chain(llm, retriever)
